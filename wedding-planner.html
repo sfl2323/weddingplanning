@@ -972,7 +972,7 @@ const DAYOF_CAT={
 let filters={planning:'all',attire:'all',guests:'all',ceremony:'all'};
 let collapsed=gs('collapsed',{});
 function getTask(id){return S['cl_'+id]||{done:false,note:'',noteOpen:false};}
-function setTask(id,patch){S['cl_'+id]={...getTask(id),...patch};save(S);}
+function setTask(id,patch){S['cl_'+id]={...getTask(id),...patch};ss('cl_'+id,S['cl_'+id]);}
 
 function setFilter(tab,f,btn){
   filters[tab]=f;
@@ -1233,7 +1233,7 @@ const SUPPLY_CATS=[
 ];
 let supplyFilter='all';
 function getSupply(id){return S['sup_'+id]||{packed:false};}
-function setSupply(id,patch){S['sup_'+id]={...getSupply(id),...patch};save(S);}
+function setSupply(id,patch){S['sup_'+id]={...getSupply(id),...patch};saveLocal(S);}
 function setSupplyFilter(f,btn){
   supplyFilter=f;
   document.querySelectorAll('#tab-dayof .filter-pill').forEach(b=>b.classList.remove('active'));
@@ -1551,10 +1551,10 @@ initFirebase();
 
 <!-- ═══════ TAB: NOTES ═══════ -->
 <section class="section" id="tab-notes">
-  <div class="section-title-row"><h2>Notes</h2><span class="section-subtitle">Freeform thoughts, vendor info, ideas</span></div>
+  <div class="section-title-row"><h2>Notes</h2><span class="section-subtitle">Each card is a separate note — add as many as you need</span></div>
   <div class="notes-grid" id="notes-wrap"></div>
   <br/>
-  <button class="add-note-btn" onclick="addNote()">+ Add a note</button>
+  <button class="add-note-btn" onclick="addNote()">+ Add a new note</button>
 </section>
 
 <!-- ── WEDDING PARTY SUBPAGE ── -->
