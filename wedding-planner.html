@@ -255,6 +255,23 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .search-result-text{font-size:.83rem;color:var(--ink);flex:1;line-height:1.4;}
 .search-result-dl{font-size:.7rem;color:var(--muted);font-style:italic;margin-top:1px;}
 .search-no-results{padding:.9rem;text-align:center;color:var(--muted);font-style:italic;font-size:.82rem;}
+
+/* ── NOTES ── */
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:.9rem;margin-bottom:1rem;}
+.note-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;min-height:180px;}
+.note-card-header{display:flex;align-items:center;gap:.45rem;padding:.6rem .85rem;border-bottom:1px solid var(--border);}
+.note-card-header input{flex:1;font-family:'Cormorant Garamond',serif;font-size:1rem;border:none;background:transparent;color:var(--ink);}
+.note-card-header input:focus{outline:none;}
+.note-card-header input::placeholder{color:var(--muted);font-style:italic;}
+.note-card textarea{flex:1;padding:.7rem .85rem;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:300;border:none;background:transparent;color:var(--ink);resize:none;min-height:110px;line-height:1.6;width:100%;}
+.note-card textarea:focus{outline:none;}
+.note-card textarea::placeholder{color:var(--muted);font-style:italic;}
+.note-card-footer{padding:.35rem .85rem;background:var(--cream);border-top:1px solid var(--border);font-size:.68rem;color:var(--muted);}
+.add-note-btn{display:block;width:100%;padding:.8rem;font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;border:1px dashed var(--border);border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;}
+.add-note-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt);}
+
+.task-delete-btn{background:none;border:none;color:var(--border);cursor:pointer;font-size:.75rem;padding:2px 4px;flex-shrink:0;margin-top:2px;transition:color .15s;line-height:1;}
+.task-delete-btn:hover{color:#b94040;}
 </style>
 </head>
 <body>
@@ -969,6 +986,7 @@ function renderCatHTML(cat,tab,f,search){
     const count=cat.panel==='venues'?getVenues().length:cat.panel==='vendors'?getVendors().length:Object.values(getParty()).reduce((a,v)=>a+v.length,0);
     const extra=gs('clExtra_'+cat.id,[]);
     const tasks=[...(cat.tasks||[]),...extra].filter(t=>{
+      if(getTask(t.id).deleted)return false;
       if(search&&!t.l.toLowerCase().includes(search))return false;
       const ts=getTask(t.id);
       if(f==='done'&&!ts.done)return false;
@@ -999,6 +1017,7 @@ function renderCatHTML(cat,tab,f,search){
             <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
             ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
           </div>
+          <button class="task-delete-btn" onclick="deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
         </div>`;
       });
       html+=`<div class="add-task-row">
@@ -1012,6 +1031,7 @@ function renderCatHTML(cat,tab,f,search){
   // Normal checklist category
   const extra=gs('clExtra_'+cat.id,[]);
   const tasks=[...cat.tasks,...extra].filter(t=>{
+    if(getTask(t.id).deleted)return false;
     if(search&&!t.l.toLowerCase().includes(search))return false;
     const ts=getTask(t.id);
     if(f==='done'&&!ts.done)return false;
@@ -1038,6 +1058,7 @@ function renderCatHTML(cat,tab,f,search){
           <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
           ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
         </div>
+        <button class="task-delete-btn" onclick="deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
       </div>`;
     });
     html+=`<div class="add-task-row">
@@ -1394,6 +1415,32 @@ function deleteNote(i){
   const notes=getNotes();notes.splice(i,1);saveNotes(notes);renderNotes();
 }
 
+
+
+function deleteTask(taskId, catId, tab){
+  // Check if it's a built-in task or a custom one
+  const extras = gs('clExtra_'+catId, []);
+  const isCustom = extras.some(t => t.id === taskId);
+  if(isCustom){
+    // Remove from extras
+    ss('clExtra_'+catId, extras.filter(t => t.id !== taskId));
+  } else {
+    // Mark built-in task as deleted
+    setTask(taskId, { deleted: true });
+  }
+  renderTab(tab);
+}
+
+function deleteTaskDO(taskId){
+  const extras = gs('clExtra_'+DAYOF_CAT.id, []);
+  const isCustom = extras.some(t => t.id === taskId);
+  if(isCustom){
+    ss('clExtra_'+DAYOF_CAT.id, extras.filter(t => t.id !== taskId));
+  } else {
+    setTask(taskId, { deleted: true });
+  }
+  renderDayOfChecklist();
+}
 
 /* ══ GLOBAL SEARCH ══ */
 const ALL_TABS_META = [
