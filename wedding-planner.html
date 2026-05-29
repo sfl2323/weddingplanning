@@ -553,6 +553,7 @@ function switchTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
   if(id==='budget')renderBudget();
+  if(id==='notes')renderNotes();
 }
 
 /* ══════════════════════════════════════════════
@@ -815,7 +816,6 @@ const TABS={
       {id:'big-picture',name:'Big picture',color:'#3d6b52',tasks:[
         {id:'bp-email',  l:'Create a dedicated wedding email address',       dl:'Now'},
         {id:'bp-guests', l:'Decide on a rough guest count',                  dl:'Now – May 2026'},
-        {id:'bp-budget', l:'Set your total budget',                          dl:'Now – May 2026'},
         {id:'bp-date',   l:'Choose a wedding date or date range',            dl:'Apr – Jun 2026'},
         {id:'bp-vibe',   l:'Pick your general vibe / theme',                 dl:'Jun – Aug 2026'},
       ]},
