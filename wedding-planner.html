@@ -38,7 +38,7 @@ header h1 span{color:rgba(250,247,242,.7);}
 #countdown-display{font-size:.78rem;color:rgba(250,247,242,.65);margin-top:.5rem;font-style:italic;}
 
 /* NAV */
-nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:.8rem .85rem;font-family:'Jost',sans-serif;font-size:.7rem;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s;}
 .tab-btn:hover{color:var(--green);}
 .tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
@@ -278,10 +278,6 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   <div id="sync-status" style="font-size:.7rem;margin-top:.3rem;color:rgba(250,247,242,.5);font-style:italic;">Saved locally</div>
 </header>
 
-<div id="firebase-banner" style="background:var(--green-lt);border-bottom:1px solid var(--green-mid);padding:.65rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-  <p style="font-size:.78rem;color:var(--green-dk);margin:0;"><strong style="font-weight:500;">To sync with your sister:</strong> Add your Firebase config to the <code style="background:var(--green-mid);padding:1px 5px;border-radius:3px;font-size:.75rem;">FIREBASE_CONFIG</code> variable at the top of the &lt;script&gt; block, then re-upload to GitHub.</p>
-  <button onclick="document.getElementById('firebase-banner').style.display='none'" style="background:none;border:none;color:var(--green);cursor:pointer;font-size:.85rem;flex-shrink:0;">✕ Dismiss</button>
-</div>
 <nav>
   <button class="tab-btn active" onclick="switchTab('planning',this)">Foundation</button>
   <button class="tab-btn" onclick="switchTab('attire',this)">Attire &amp; Décor</button>
