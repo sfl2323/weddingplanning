@@ -446,6 +446,7 @@ const FIREBASE_CONFIG = {
 const SK='wedding_v4';
 let S={};
 let db=null;
+let saveTimer=null;
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function loadLocal(){try{return JSON.parse(localStorage.getItem(SK))||{};}catch{return{};}}
@@ -455,19 +456,13 @@ function gs(k,d){return k in S?S[k]:d;}
 function ss(k,v){
   S[k]=v;
   saveLocal(S);
+  // Debounce Firebase writes — store entire blob as one key to avoid key encoding issues
   if(db){
-    try{db.ref('wedding/'+encodeKey(k)).set(v);}catch(e){console.warn('Firebase write:',e);}
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{
+      try{db.ref('weddingData').set(JSON.stringify(S));}catch(e){console.warn('Firebase write:',e);}
+    },600);
   }
-}
-
-// Firebase keys can't have . # $ [ ]
-function encodeKey(k){return k.replace(/[.#$[\]]/g,'_');}
-function decodeFirebaseData(data){
-  // flatten firebase object back to our flat key-value store
-  const result={};
-  if(!data)return result;
-  Object.keys(data).forEach(k=>{result[k]=data[k];});
-  return result;
 }
 
 function showSyncStatus(state){
@@ -508,11 +503,16 @@ function initFirebase(){
         db=firebase.database();
         showSyncStatus('connecting');
         // Listen for changes
-        db.ref('wedding').on('value', snap=>{
-          const firebaseData=decodeFirebaseData(snap.val());
-          // Merge firebase data over local
-          S={...S,...firebaseData};
-          saveLocal(S);
+        db.ref('weddingData').on('value', snap=>{
+          const raw=snap.val();
+          if(raw){
+            try{
+              const firebaseData=JSON.parse(raw);
+              // Firebase is source of truth — use it over local
+              S=firebaseData;
+              saveLocal(S);
+            }catch(e){console.warn('Firebase parse error:',e);}
+          }
           showSyncStatus('synced');
           rerenderAll();
         }, err=>{
@@ -1372,8 +1372,13 @@ function renderNotes(){
 function addNote(){
   const notes=getNotes();
   notes.unshift({title:'',body:'',updated:''});
-  saveNotes(notes);renderNotes();
-  document.querySelector('.note-card input')?.focus();
+  saveNotes(notes);
+  // Make sure notes tab is active before rendering
+  const wrap=document.getElementById('notes-wrap');
+  if(wrap){
+    renderNotes();
+    setTimeout(()=>document.querySelector('#notes-wrap .note-card input')?.focus(),50);
+  }
 }
 function updateNote(i,key,val){
   const notes=getNotes();
