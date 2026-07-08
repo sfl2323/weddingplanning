@@ -276,6 +276,14 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 </head>
 <body>
 
+
+<div id="loading-screen" style="display:none;position:fixed;inset:0;background:var(--green);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:1rem;">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-style:italic;color:var(--cream);font-weight:300;">Sharon & Steven</div>
+  <div style="font-family:'Jost',sans-serif;font-size:.8rem;color:rgba(255,255,255,.6);letter-spacing:.15em;text-transform:uppercase;">Loading your planner…</div>
+  <div style="width:40px;height:40px;border:2px solid rgba(255,255,255,.2);border-top-color:rgba(255,255,255,.8);border-radius:50%;animation:spin .8s linear infinite;margin-top:.5rem;"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+
 <header>
   <h1>Sharon <span>&</span> Steven</h1>
   <p class="header-sub">Wedding Planner</p>
@@ -503,12 +511,19 @@ function rerenderAll(){
 }
 
 function initFirebase(){
-  // Always load local data first so app starts immediately
-  S=loadLocal();
-  initApp();
-  showSyncStatus('local');
+  showSyncStatus('connecting');
+  // Show loading screen while Firebase connects
+  document.getElementById('loading-screen').style.display='flex';
 
-  // Then try to connect Firebase in background
+  // Fallback: if Firebase doesn't load in 6 seconds, use localStorage
+  const fallbackTimer=setTimeout(()=>{
+    console.warn('Firebase timeout — falling back to localStorage');
+    S=loadLocal();
+    hideLanding();
+    initApp();
+    showSyncStatus('error');
+  }, 6000);
+
   const script1=document.createElement('script');
   script1.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
   script1.onload=()=>{
@@ -518,34 +533,68 @@ function initFirebase(){
       try{
         firebase.initializeApp(FIREBASE_CONFIG);
         db=firebase.database();
-        showSyncStatus('connecting');
-        // Listen for changes
+        let firstLoad=true;
         db.ref('weddingData').on('value', snap=>{
           const raw=snap.val();
           if(raw){
             try{
-              const firebaseData=JSON.parse(raw);
-              // Firebase is source of truth — use it over local
-              S=firebaseData;
+              S=JSON.parse(raw);
               saveLocal(S);
-            }catch(e){console.warn('Firebase parse error:',e);}
+            }catch(e){
+              console.warn('Firebase parse error:',e);
+              S=loadLocal();
+            }
+          } else {
+            // Nothing in Firebase yet — use localStorage if available
+            S=loadLocal();
           }
           showSyncStatus('synced');
-          rerenderAll();
+          if(firstLoad){
+            firstLoad=false;
+            clearTimeout(fallbackTimer);
+            hideLanding();
+            initApp();
+          } else {
+            rerenderAll();
+          }
         }, err=>{
           console.warn('Firebase read error:',err);
+          clearTimeout(fallbackTimer);
+          S=loadLocal();
+          hideLanding();
+          initApp();
           showSyncStatus('error');
         });
       }catch(e){
         console.warn('Firebase init error:',e);
+        clearTimeout(fallbackTimer);
+        S=loadLocal();
+        hideLanding();
+        initApp();
         showSyncStatus('error');
       }
     };
-    script2.onerror=()=>showSyncStatus('error');
+    script2.onerror=()=>{
+      clearTimeout(fallbackTimer);
+      S=loadLocal();
+      hideLanding();
+      initApp();
+      showSyncStatus('error');
+    };
     document.head.appendChild(script2);
   };
-  script1.onerror=()=>showSyncStatus('error');
+  script1.onerror=()=>{
+    clearTimeout(fallbackTimer);
+    S=loadLocal();
+    hideLanding();
+    initApp();
+    showSyncStatus('error');
+  };
   document.head.appendChild(script1);
+}
+
+function hideLanding(){
+  document.getElementById('loading-screen').style.display='none';
 }
 
 /* ══ HEADER ══ */
