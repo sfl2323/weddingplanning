@@ -664,12 +664,12 @@ function renderVenues(){
         ondragover="dragOver(event)"
         ondrop="dragDrop(event,'venues',${i})"
         ondragend="dragEnd(event)">
-      <div class="v-card-header" onclick="toggleVCard('${v.id}')">
+      <div class="v-card-header">
         <span class="drag-handle" title="Drag to reorder" draggable="true"
           ondragstart="dragStart(event,'venues',${i})"
           onclick="event.stopPropagation()">⠿</span>
-        <span class="rank-badge">${i+1}</span>
-        <div style="flex:1;min-width:0;">
+        <span class="rank-badge" onclick="toggleVCard('${v.id}')" style="cursor:pointer;">${i+1}</span>
+        <div style="flex:1;min-width:0;user-select:text;-webkit-user-select:text;">
           <div class="v-card-name">${esc(v.name)}</div>
           ${v.address?`<div class="v-card-meta">📍 ${esc(v.address)}</div>`:''}
           ${v.priceRange?`<div class="v-card-meta">💰 ${esc(v.priceRange)}</div>`:''}
@@ -677,7 +677,7 @@ function renderVenues(){
         </div>
         <button class="icon-btn" onclick="toggleCrossOut(event,'venues',${i})" title="${v.crossedOut?'Un-cross out':'Cross out'}" style="font-size:.85rem;">${v.crossedOut?'↩':'⊘'}</button>
         <button class="v-card-delete" onclick="deleteCard(event,'venues',${i})" title="Remove">✕</button>
-        <span class="v-card-chevron${v.open?' open':''}">▾</span>
+        <span class="v-card-chevron${v.open?' open':''}" onclick="toggleVCard('${v.id}')" style="cursor:pointer;padding:4px 6px;">▾</span>
       </div>
       <div class="v-card-body${v.open?' open':''}" id="vb-${v.id}">
         <div class="v-fields">
@@ -785,19 +785,19 @@ function renderVendors(){
         ondragover="dragOver(event)"
         ondrop="dragDrop(event,'vendors',${i})"
         ondragend="dragEnd(event)">
-      <div class="v-card-header" onclick="toggleVdCard('${v.id}')">
+      <div class="v-card-header">
         <span class="drag-handle" title="Drag to reorder" draggable="true"
           ondragstart="dragStart(event,'vendors',${i})"
           onclick="event.stopPropagation()">⠿</span>
-        <span class="rank-badge">${i+1}</span>
-        <div style="flex:1;min-width:0;">
+        <span class="rank-badge" onclick="toggleVdCard('${v.id}')" style="cursor:pointer;">${i+1}</span>
+        <div style="flex:1;min-width:0;user-select:text;-webkit-user-select:text;">
           <div class="v-card-name">${esc(v.name)}${stars?` <span style="font-size:.75rem;color:var(--green);letter-spacing:-.5px">${stars}</span>`:''}</div>
           ${v.contactName?`<div class="v-card-meta">👤 ${esc(v.contactName)}</div>`:''}
           ${v.phone||v.email?`<div class="v-card-meta">${v.phone?'📞 '+esc(v.phone):''}${v.phone&&v.email?' · ':''}${v.email?'✉ '+esc(v.email):''}</div>`:''}
           ${tags.length?`<div class="v-card-tags">${tags.join('')}</div>`:''}
         </div>
         <button class="v-card-delete" onclick="deleteCard(event,'vendors',${i})" title="Remove">✕</button>
-        <span class="v-card-chevron${v.open?' open':''}">▾</span>
+        <span class="v-card-chevron${v.open?' open':''}" onclick="toggleVdCard('${v.id}')" style="cursor:pointer;padding:4px 6px;">▾</span>
       </div>
       <div class="v-card-body${v.open?' open':''}" id="vdb-${v.id}">
         <div class="v-fields">
