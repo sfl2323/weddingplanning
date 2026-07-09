@@ -69,7 +69,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 
 /* CATEGORY CARDS */
 .cat-card{background:var(--white);border:1px solid var(--border);border-radius:8px;margin-bottom:.85rem;overflow:hidden;}
-.cat-header{display:flex;align-items:center;gap:.65rem;padding:.8rem 1rem;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:background .15s;}
+.cat-header{display:flex;align-items:center;gap:.65rem;padding:.8rem 1rem;cursor:pointer;border-bottom:1px solid transparent;transition:background .15s;}
 .cat-header:hover{background:var(--cream);}
 .cat-header.open{border-bottom-color:var(--border);}
 .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -108,7 +108,7 @@ textarea.task-note:focus{outline:none;border-color:var(--green);}
 .v-card.drag-over{border-color:var(--green);box-shadow:0 0 0 2px var(--green-mid);}
 .v-card-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;user-select:none;}
 .v-card-header:hover{background:var(--cream);}
-.drag-handle{color:var(--border);font-size:1rem;cursor:grab;flex-shrink:0;line-height:1;}
+.drag-handle{color:var(--border);font-size:1rem;cursor:grab;flex-shrink:0;line-height:1;user-select:none;-webkit-user-select:none;}
 .rank-badge{width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--cream);font-size:.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:400;}
 .v-card-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;flex:1;color:var(--ink);}
 .v-card-meta{font-size:.73rem;color:var(--muted);font-style:italic;}
@@ -272,6 +272,10 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 
 .task-delete-btn{background:none;border:none;color:var(--border);cursor:pointer;font-size:.75rem;padding:2px 4px;flex-shrink:0;margin-top:2px;transition:color .15s;line-height:1;}
 .task-delete-btn:hover{color:#b94040;}
+
+.v-card.crossed-out .v-card-name{text-decoration:line-through;color:var(--muted);}
+.v-card.crossed-out{opacity:.6;}
+.v-card.crossed-out .rank-badge{background:var(--muted);}
 </style>
 </head>
 <body>
@@ -282,7 +286,11 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   <div style="font-family:'Jost',sans-serif;font-size:.8rem;color:rgba(255,255,255,.6);letter-spacing:.15em;text-transform:uppercase;">Loading your planner…</div>
   <div style="width:40px;height:40px;border:2px solid rgba(255,255,255,.2);border-top-color:rgba(255,255,255,.8);border-radius:50%;animation:spin .8s linear infinite;margin-top:.5rem;"></div>
 </div>
-<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+<style>@keyframes spin{to{transform:rotate(360deg);}}
+.v-card.crossed-out .v-card-name{text-decoration:line-through;color:var(--muted);}
+.v-card.crossed-out{opacity:.6;}
+.v-card.crossed-out .rank-badge{background:var(--muted);}
+</style>
 
 <header>
   <h1>Sharon <span>&</span> Steven</h1>
@@ -652,13 +660,14 @@ function renderVenues(){
     if(v.availability==='Yes')tags.push(`<span class="v-tag green">Available</span>`);
     if(v.availability==='No')tags.push(`<span class="v-tag red">Unavailable</span>`);
     if(v.contractSigned)tags.push(`<span class="v-tag green">Contract signed ✓</span>`);
-    return`<div class="v-card" id="vc-${v.id}" draggable="true"
-        ondragstart="dragStart(event,'venues',${i})"
+    return`<div class="v-card${v.crossedOut?' crossed-out':''}" id="vc-${v.id}"
         ondragover="dragOver(event)"
         ondrop="dragDrop(event,'venues',${i})"
         ondragend="dragEnd(event)">
       <div class="v-card-header" onclick="toggleVCard('${v.id}')">
-        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <span class="drag-handle" title="Drag to reorder" draggable="true"
+          ondragstart="dragStart(event,'venues',${i})"
+          onclick="event.stopPropagation()">⠿</span>
         <span class="rank-badge">${i+1}</span>
         <div style="flex:1;min-width:0;">
           <div class="v-card-name">${esc(v.name)}</div>
@@ -666,6 +675,7 @@ function renderVenues(){
           ${v.priceRange?`<div class="v-card-meta">💰 ${esc(v.priceRange)}</div>`:''}
           ${tags.length?`<div class="v-card-tags">${tags.join('')}</div>`:''}
         </div>
+        <button class="icon-btn" onclick="toggleCrossOut(event,'venues',${i})" title="${v.crossedOut?'Un-cross out':'Cross out'}" style="font-size:.85rem;">${v.crossedOut?'↩':'⊘'}</button>
         <button class="v-card-delete" onclick="deleteCard(event,'venues',${i})" title="Remove">✕</button>
         <span class="v-card-chevron${v.open?' open':''}">▾</span>
       </div>
@@ -771,13 +781,14 @@ function renderVendors(){
     if(v.availability==='Yes')tags.push(`<span class="v-tag green">Available</span>`);
     if(v.availability==='No')tags.push(`<span class="v-tag red">Unavailable</span>`);
     const stars=v.rating?'★'.repeat(parseInt(v.rating))+'☆'.repeat(5-parseInt(v.rating)):'';
-    return`<div class="v-card" id="vdc-${v.id}" draggable="true"
-        ondragstart="dragStart(event,'vendors',${i})"
+    return`<div class="v-card" id="vdc-${v.id}"
         ondragover="dragOver(event)"
         ondrop="dragDrop(event,'vendors',${i})"
         ondragend="dragEnd(event)">
       <div class="v-card-header" onclick="toggleVdCard('${v.id}')">
-        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <span class="drag-handle" title="Drag to reorder" draggable="true"
+          ondragstart="dragStart(event,'vendors',${i})"
+          onclick="event.stopPropagation()">⠿</span>
         <span class="rank-badge">${i+1}</span>
         <div style="flex:1;min-width:0;">
           <div class="v-card-name">${esc(v.name)}${stars?` <span style="font-size:.75rem;color:var(--green);letter-spacing:-.5px">${stars}</span>`:''}</div>
@@ -841,6 +852,15 @@ function toggleVdCard(id){
   if(v){v.open=!v.open;saveVendors(vendors);renderVendors();}
 }
 
+
+function toggleCrossOut(e,type,i){
+  e.stopPropagation();
+  const items=type==='venues'?getVenues():getVendors();
+  if(!items[i])return;
+  items[i].crossedOut=!items[i].crossedOut;
+  type==='venues'?saveVenues(items):saveVendors(items);
+  type==='venues'?renderVenues():renderVendors();
+}
 /* ══ SHARED DELETE ══ */
 function deleteCard(e,type,i){
   e.stopPropagation();
@@ -1407,19 +1427,73 @@ function renderParty(){
     wrap.innerHTML='<p style="color:var(--muted);font-style:italic;font-size:.85rem;padding:.5rem 0;">No one added yet — use the form below to build your wedding party.</p>';
     return;
   }
-  wrap.innerHTML=populated.map(role=>{
+  // Show all roles (populated ones + empty ones as drop targets)
+  wrap.innerHTML=PARTY_ROLES.map(role=>{
     const members=party[role]||[];
-    return`<div class="party-role-section">
+    if(!members.length && !populated.includes(role)) return ''; // hide empty roles unless populated
+    return`<div class="party-role-section" 
+        ondragover="partyDragOver(event,'${role}')" 
+        ondrop="partyDrop(event,'${role}')"
+        ondragleave="partyDragLeave(event)"
+        id="party-role-${role.replace(/[^a-zA-Z]/g,'_')}">
       <div class="party-role-header">
         <span class="party-role-title">${role}</span>
         <span class="party-role-count">${members.length} ${members.length===1?'person':'people'}</span>
       </div>
-      ${members.length?members.map(m=>`<div class="party-member-row">
+      ${members.length?members.map(m=>`<div class="party-member-row" 
+          draggable="true"
+          ondragstart="partyDragStart(event,'${role}','${m.id}')"
+          ondragend="partyDragEnd(event)"
+          id="pm-${m.id}">
+        <span class="party-drag-handle">⠿</span>
         <span class="party-member-name">${esc(m.name)}</span>
         <button class="party-member-remove" onclick="removePartyMember('${role}','${m.id}')" title="Remove">✕</button>
-      </div>`).join(''):'<div class="party-empty">No one added yet</div>'}
+      </div>`).join(''):`<div class="party-empty" style="font-size:.78rem;color:var(--muted);font-style:italic;padding:.4rem 1rem .5rem;">Drop here to add</div>`}
     </div>`;
-  }).join('');
+  }).filter(Boolean).join('');
+}
+
+/* ── Party drag & drop ── */
+let partyDragSrc={role:null,id:null};
+
+function partyDragStart(e,role,id){
+  partyDragSrc={role,id};
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function partyDragEnd(e){
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.party-role-section').forEach(s=>s.classList.remove('drag-over'));
+}
+function partyDragOver(e,role){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  const section=e.currentTarget.closest('.party-role-section')||e.currentTarget;
+  section.classList.add('drag-over');
+}
+function partyDragLeave(e){
+  const section=e.currentTarget;
+  if(!section.contains(e.relatedTarget)){
+    section.classList.remove('drag-over');
+  }
+}
+function partyDrop(e,targetRole){
+  e.preventDefault();
+  document.querySelectorAll('.party-role-section').forEach(s=>s.classList.remove('drag-over'));
+  const {role:srcRole,id:srcId}=partyDragSrc;
+  if(!srcRole||!srcId||srcRole===targetRole)return;
+  const party=getParty();
+  // Find and remove from source
+  const srcMembers=party[srcRole]||[];
+  const member=srcMembers.find(m=>m.id===srcId);
+  if(!member)return;
+  party[srcRole]=srcMembers.filter(m=>m.id!==srcId);
+  if(!party[srcRole].length)delete party[srcRole];
+  // Add to target
+  if(!party[targetRole])party[targetRole]=[];
+  party[targetRole].push(member);
+  saveParty(party);
+  renderParty();
 }
 
 
