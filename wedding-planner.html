@@ -276,6 +276,27 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .v-card.crossed-out .v-card-name{text-decoration:line-through;color:var(--muted);}
 .v-card.crossed-out{opacity:.6;}
 .v-card.crossed-out .rank-badge{background:var(--muted);}
+
+/* ── VENUE COMPARISON ── */
+.venue-compare-wrap{overflow-x:auto;margin-bottom:1.5rem;}
+.venue-compare-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px;}
+.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:nowrap;}
+.venue-compare-table th:first-child{background:var(--warm);color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;}
+.venue-compare-table td{padding:.55rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink);}
+.venue-compare-table td:first-child{font-size:.8rem;color:var(--muted);font-weight:400;background:var(--cream);white-space:nowrap;}
+.venue-compare-table tr:hover td{background:var(--green-lt);}
+.venue-compare-table tr:hover td:first-child{background:var(--green-lt);}
+.venue-compare-table td input{width:100%;border:none;background:transparent;font-family:'Jost',sans-serif;font-size:.82rem;color:var(--ink);padding:0;min-width:80px;}
+.venue-compare-table td input:focus{outline:none;border-bottom:1px solid var(--green);}
+.venue-compare-table th input{width:100%;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--green-dk);padding:0;font-weight:400;}
+.venue-compare-table th input:focus{outline:none;border-bottom:1px solid var(--green-dk);}
+.venue-compare-total td{font-weight:500;background:var(--green-lt)!important;border-top:2px solid var(--green);}
+.venue-compare-total td:first-child{background:var(--green-lt)!important;}
+.compare-add-col{margin-top:.75rem;display:flex;gap:.5rem;align-items:center;}
+.compare-add-row-wrap{margin-top:.5rem;display:flex;gap:.5rem;align-items:center;}
+.compare-tab-row{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;flex-wrap:wrap;}
+.compare-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.4rem .9rem;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;margin-bottom:-1px;}
+.compare-tab.active{color:var(--green);border-bottom-color:var(--green);}
 </style>
 </head>
 <body>
@@ -290,6 +311,27 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .v-card.crossed-out .v-card-name{text-decoration:line-through;color:var(--muted);}
 .v-card.crossed-out{opacity:.6;}
 .v-card.crossed-out .rank-badge{background:var(--muted);}
+
+/* ── VENUE COMPARISON ── */
+.venue-compare-wrap{overflow-x:auto;margin-bottom:1.5rem;}
+.venue-compare-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px;}
+.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:nowrap;}
+.venue-compare-table th:first-child{background:var(--warm);color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;}
+.venue-compare-table td{padding:.55rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink);}
+.venue-compare-table td:first-child{font-size:.8rem;color:var(--muted);font-weight:400;background:var(--cream);white-space:nowrap;}
+.venue-compare-table tr:hover td{background:var(--green-lt);}
+.venue-compare-table tr:hover td:first-child{background:var(--green-lt);}
+.venue-compare-table td input{width:100%;border:none;background:transparent;font-family:'Jost',sans-serif;font-size:.82rem;color:var(--ink);padding:0;min-width:80px;}
+.venue-compare-table td input:focus{outline:none;border-bottom:1px solid var(--green);}
+.venue-compare-table th input{width:100%;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--green-dk);padding:0;font-weight:400;}
+.venue-compare-table th input:focus{outline:none;border-bottom:1px solid var(--green-dk);}
+.venue-compare-total td{font-weight:500;background:var(--green-lt)!important;border-top:2px solid var(--green);}
+.venue-compare-total td:first-child{background:var(--green-lt)!important;}
+.compare-add-col{margin-top:.75rem;display:flex;gap:.5rem;align-items:center;}
+.compare-add-row-wrap{margin-top:.5rem;display:flex;gap:.5rem;align-items:center;}
+.compare-tab-row{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;flex-wrap:wrap;}
+.compare-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.4rem .9rem;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .15s;margin-bottom:-1px;}
+.compare-tab.active{color:var(--green);border-bottom-color:var(--green);}
 </style>
 
 <header>
@@ -508,6 +550,7 @@ function showSyncStatus(state){
 
 function rerenderAll(){
   ['planning','attire','guests','ceremony'].forEach(renderTab);
+  if(document.getElementById('compare-wrap'))renderCompareTable();
   renderDayOfChecklist();
   renderAgenda();
   renderSupplies();
@@ -1565,6 +1608,157 @@ function deleteTaskDO(taskId){
   renderDayOfChecklist();
 }
 
+
+/* ══ VENUE COMPARISON TABLE ══ */
+const DEFAULT_COMPARE_ROWS = [
+  'Date','Venue / food fee','Outside catering','Gratuity','Alcohol','Ceremony fee','Daytime buyout','Valet'
+];
+
+const DEFAULT_COMPARE_DATA = {
+  cols: [
+    {id:'c1', name:'Swan In-House'},
+    {id:'c2', name:'Swan Outside Catering'},
+    {id:'c3', name:'Northern Gala (venue bar)'},
+    {id:'c4', name:'Northern Gala (BYO wholesale)'},
+    {id:'c5', name:'Heritage In-House'},
+    {id:'c6', name:'Heritage Outside Catering'},
+  ],
+  rows: DEFAULT_COMPARE_ROWS,
+  cells: {
+    'Date':                {'c1':'10/1/27','c2':'10/1/27','c3':'Nov 2027','c4':'Nov 2027','c5':'5/13/28','c6':'5/13/28'},
+    'Venue / food fee':    {'c1':'$59,635','c2':'$43,070','c3':'$59,700','c4':'$59,700','c5':'$74,542','c6':'$51,355'},
+    'Outside catering':    {'c1':'—','c2':'$25,000','c3':'—','c4':'—','c5':'—','c6':'$25,000'},
+    'Gratuity':            {'c1':'included','c2':'included','c3':'$8,955','c4':'$8,955','c5':'included','c6':'included'},
+    'Alcohol':             {'c1':'included','c2':'included','c3':'$18,750','c4':'$15,390 + unknown fees','c5':'included','c6':'included'},
+    'Ceremony fee':        {'c1':'$2,478','c2':'$2,478','c3':'$0','c4':'$0','c5':'$1,750','c6':'$1,750'},
+    'Daytime buyout':      {'c1':'not offered','c2':'not offered','c3':'$0','c4':'$0','c5':'$7,500','c6':'$7,500'},
+    'Valet':               {'c1':'$1,500','c2':'$1,500','c3':'not quoted','c4':'not quoted','c5':'$1,800','c6':'$1,800'},
+  },
+  totals: {'c1':'$63,613','c2':'$72,048','c3':'$87,405','c4':'$84,045+','c5':'$85,592','c6':'$87,405'},
+};
+
+function getCompareData(){
+  const saved = gs('compareData', null);
+  if(saved) return saved;
+  // First load — seed with default data and save
+  ss('compareData', DEFAULT_COMPARE_DATA);
+  return DEFAULT_COMPARE_DATA;
+}
+function saveCompareData(d){ss('compareData',d);}
+
+function renderCompareTable(){
+  const wrap = document.getElementById('compare-wrap');
+  if(!wrap) return;
+  const d = getCompareData();
+
+  let html = '<div class="venue-compare-wrap"><table class="venue-compare-table"><thead><tr>';
+  html += '<th style="min-width:110px">Item</th>';
+  d.cols.forEach((col,ci) => {
+    html += `<th><input value="${esc(col.name)}" oninput="updateCompareCol(${ci},this.value)" placeholder="Venue name" />
+      <button onclick="removeCompareCol(${ci})" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.7rem;float:right;padding:0;" title="Remove column">✕</button>
+    </th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  d.rows.forEach((row,ri) => {
+    html += `<tr><td><span style="user-select:text">${esc(row)}</span>
+      <button onclick="removeCompareRow('${esc(row)}')" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.65rem;margin-left:4px;" title="Remove row">✕</button>
+    </td>`;
+    d.cols.forEach(col => {
+      const val = (d.cells[row]||{})[col.id]||'';
+      html += `<td><input value="${esc(val)}" oninput="updateCompareCell('${esc(row)}','${col.id}',this.value)" placeholder="—" /></td>`;
+    });
+    html += '</tr>';
+  });
+
+  // Total row
+  html += '<tr class="venue-compare-total"><td>Total</td>';
+  d.cols.forEach(col => {
+    const val = d.totals[col.id]||'';
+    html += `<td><input value="${esc(val)}" oninput="updateCompareTotal('${col.id}',this.value)" placeholder="—" style="font-weight:500;" /></td>`;
+  });
+  html += '</tr></tbody></table></div>';
+
+  // Add row / add column controls
+  html += `<div class="compare-add-row-wrap">
+    <input type="text" id="compare-new-row" placeholder="Add a row (e.g. Parking)" 
+      style="padding:5px 9px;border:1px solid var(--border);border-radius:5px;font-family:'Jost',sans-serif;font-size:.79rem;background:var(--white);color:var(--ink);min-width:200px;"
+      onkeydown="if(event.key==='Enter')addCompareRow()" />
+    <button class="btn-small" onclick="addCompareRow()">+ Add row</button>
+  </div>
+  <div class="compare-add-col" style="margin-top:.5rem;">
+    <input type="text" id="compare-new-col" placeholder="Add a venue column" 
+      style="padding:5px 9px;border:1px solid var(--border);border-radius:5px;font-family:'Jost',sans-serif;font-size:.79rem;background:var(--white);color:var(--ink);min-width:200px;"
+      onkeydown="if(event.key==='Enter')addCompareCol()" />
+    <button class="btn-small" onclick="addCompareCol()">+ Add column</button>
+  </div>`;
+
+  wrap.innerHTML = html;
+}
+
+function updateCompareCol(ci, val){
+  const d=getCompareData();
+  d.cols[ci].name=val;
+  saveCompareData(d);
+}
+function updateCompareCell(row, colId, val){
+  const d=getCompareData();
+  if(!d.cells[row])d.cells[row]={};
+  d.cells[row][colId]=val;
+  saveCompareData(d);
+}
+function updateCompareTotal(colId, val){
+  const d=getCompareData();
+  d.totals[colId]=val;
+  saveCompareData(d);
+}
+function addCompareRow(){
+  const inp=document.getElementById('compare-new-row');
+  if(!inp||!inp.value.trim())return;
+  const d=getCompareData();
+  d.rows.push(inp.value.trim());
+  saveCompareData(d);
+  inp.value='';
+  renderCompareTable();
+}
+function removeCompareRow(row){
+  const d=getCompareData();
+  d.rows=d.rows.filter(r=>r!==row);
+  delete d.cells[row];
+  saveCompareData(d);
+  renderCompareTable();
+}
+function addCompareCol(){
+  const inp=document.getElementById('compare-new-col');
+  if(!inp||!inp.value.trim())return;
+  const d=getCompareData();
+  const newId='c'+Date.now();
+  d.cols.push({id:newId,name:inp.value.trim()});
+  d.totals[newId]='';
+  saveCompareData(d);
+  inp.value='';
+  renderCompareTable();
+}
+function removeCompareCol(ci){
+  if(!confirm('Remove this column?'))return;
+  const d=getCompareData();
+  const colId=d.cols[ci].id;
+  d.cols.splice(ci,1);
+  delete d.totals[colId];
+  Object.keys(d.cells).forEach(row=>delete d.cells[row][colId]);
+  saveCompareData(d);
+  renderCompareTable();
+}
+
+
+function switchVenueTab(tab, btn){
+  document.querySelectorAll('.compare-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('venue-list-view').style.display = tab==='list' ? 'block' : 'none';
+  document.getElementById('venue-compare-view').style.display = tab==='compare' ? 'block' : 'none';
+  if(tab==='compare') renderCompareTable();
+}
+
 /* ══ GLOBAL SEARCH ══ */
 const ALL_TABS_META = [
   {tab:'planning', label:'Planning'},
@@ -1719,6 +1913,11 @@ initFirebase();
     <span class="subpage-title">Venues</span>
   </div>
   <div class="subpage-body">
+    <div class="compare-tab-row">
+      <button class="compare-tab active" onclick="switchVenueTab('list',this)">All Venues</button>
+      <button class="compare-tab" onclick="switchVenueTab('compare',this)">Compare</button>
+    </div>
+    <div id="venue-list-view">
     <p style="font-size:.8rem;color:var(--muted);margin-bottom:.9rem;font-style:italic;">Drag to rank your top choices. Click a venue to expand and fill in details.</p>
     <div class="card-grid" id="venue-grid"></div>
     <div class="add-card-form" style="margin-top:.75rem">
@@ -1733,6 +1932,11 @@ initFirebase();
         </select>
       </div>
       <button class="btn-primary" onclick="addVenue()">+ Add venue</button>
+    </div>
+    </div><!-- end venue-list-view -->
+    <div id="venue-compare-view" style="display:none;">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;font-style:italic;">All cells are editable. Add or remove rows and columns as needed.</p>
+      <div id="compare-wrap"></div>
     </div>
   </div>
 </div>
