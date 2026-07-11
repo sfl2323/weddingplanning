@@ -1143,7 +1143,7 @@ function setFilter(tab,f,btn){
 function renderCatHTML(cat,tab,f,search){
   // Panel category — expands to full venue or vendor workspace
   if(cat.panel){
-    const count=cat.panel==='venues'?getVenues().length:cat.panel==='vendors'?getVendors().length:cat.panel==='caterer'?getCatererData().cols.length:Object.values(getParty()).reduce((a,v)=>a+v.length,0);
+    const count=cat.panel==='venues'?getVenues().length:cat.panel==='vendors'?getVendors().length:cat.panel==='caterer'?getFoodTables().reduce((a,t)=>a+t.cols.length,0):Object.values(getParty()).reduce((a,v)=>a+v.length,0);
     const extra=gs('clExtra_'+cat.id,[]);
     const tasks=[...(cat.tasks||[]),...extra].filter(t=>{
       if(getTask(t.id).deleted)return false;
@@ -1659,125 +1659,150 @@ function deleteTaskDO(taskId){
 
 
 
-/* ══ CATERER COMPARISON TABLE ══ */
-const DEFAULT_CATERER_DATA = {
-  cols: [],
-  rows: ['Appetizers / cocktail hour','First course','Main course','Sides','Dessert','Late night snack','Price per person','Minimum guests','Gratuity','Notes'],
-  cells: {}
-};
+/* ══ FOOD COMPARISON TABLES ══ */
+const EMPTY_FOOD_TABLE = () => ({id:'ft'+Date.now(), name:'Table', cols:[], rows:[], cells:{}});
 
-function getCatererData(){
-  const saved=gs('catererData',null);
-  if(saved)return saved;
-  ss('catererData',DEFAULT_CATERER_DATA);
-  return JSON.parse(JSON.stringify(DEFAULT_CATERER_DATA));
+function getFoodTables(){
+  const saved=gs('foodTables',null);
+  if(saved&&saved.length)return saved;
+  const init=[{...EMPTY_FOOD_TABLE(),id:'ft1',name:'Menu Comparison'}];
+  ss('foodTables',init);
+  return init;
 }
-function saveCatererData(d){ss('catererData',d);}
+function saveFoodTables(tables){ss('foodTables',tables);}
 
 function openCatererPage(){
   document.getElementById('subpage-caterer').classList.add('active');
-  renderCatererTable();
+  renderAllFoodTables();
 }
 function closeCatererPage(){
   document.getElementById('subpage-caterer').classList.remove('active');
 }
 
-function renderCatererTable(){
-  const container=document.getElementById('caterer-table-container');
-  if(!container)return;
-  const d=getCatererData();
+function renderAllFoodTables(){
+  const body=document.getElementById('caterer-subpage-body');
+  if(!body)return;
+  const tables=getFoodTables();
 
-  if(!d.cols.length&&!d.rows.length){
-    container.innerHTML='<p style="color:var(--muted);font-style:italic;font-size:.85rem;">Add a caterer column and some rows to get started.</p>';
-    return;
-  }
-
-  let html='<table class="caterer-table"><thead><tr><th>Course / Item</th>';
-  d.cols.forEach((col,ci)=>{
-    html+=`<th>
-      <div contenteditable="true" onblur="updateCatererCol(${ci},this.innerText.trim())">${esc(col.name)}</div>
-      <div style="display:flex;gap:2px;margin-top:3px;">
-        <button class="col-action-btn" onclick="dupCatererCol(${ci})" title="Duplicate">⧉</button>
-        <button class="col-action-btn" onclick="removeCatererCol(${ci})" title="Remove" style="color:var(--border);">✕</button>
+  let html='';
+  tables.forEach((table,ti)=>{
+    html+=`<div class="food-table-block" id="food-table-${table.id}" style="margin-bottom:2.5rem;">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem;border-bottom:1px solid var(--border);padding-bottom:.4rem;">
+        <div contenteditable="true"
+          onblur="updateFoodTableName(${ti},this.innerText.trim())"
+          style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--green-dk);outline:none;cursor:text;flex:1;"
+        >${esc(table.name)}</div>
+        ${tables.length>1?`<button onclick="removeFoodTable(${ti})" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.8rem;" title="Remove table">✕ Remove table</button>`:''}
       </div>
-    </th>`;
-  });
-  html+='</tr></thead><tbody>';
+      <div class="caterer-table-wrap">`;
 
-  d.rows.forEach((row,ri)=>{
-    html+=`<tr><td>
-      <div style="display:flex;align-items:center;gap:.3rem;">
-        <span style="flex:1;user-select:text;">${esc(row)}</span>
-        <button onclick="removeCatererRow('${esc(row)}')" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.65rem;flex-shrink:0;" title="Remove row">✕</button>
+    if(!table.cols.length){
+      html+=`<p style="color:var(--muted);font-style:italic;font-size:.82rem;padding:.5rem 0;">Add a column to get started.</p>`;
+    } else {
+      html+=`<table class="caterer-table"><thead><tr><th style="min-width:140px;">Item</th>`;
+      table.cols.forEach((col,ci)=>{
+        html+=`<th>
+          <div contenteditable="true" onblur="updateFoodCol(${ti},${ci},this.innerText.trim())">${esc(col.name)}</div>
+          <div style="display:flex;gap:2px;margin-top:3px;">
+            <button class="col-action-btn" onclick="dupFoodCol(${ti},${ci})" title="Duplicate">⧉</button>
+            <button class="col-action-btn" onclick="removeFoodCol(${ti},${ci})" title="Remove" style="color:var(--border);">✕</button>
+          </div>
+        </th>`;
+      });
+      html+=`</tr></thead><tbody>`;
+      table.rows.forEach((row,ri)=>{
+        html+=`<tr><td>
+          <div style="display:flex;align-items:center;gap:.3rem;">
+            <span style="flex:1;user-select:text;">${esc(row)}</span>
+            <button onclick="removeFoodRow(${ti},'${esc(row)}')" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.65rem;" title="Remove row">✕</button>
+          </div>
+        </td>`;
+        table.cols.forEach(col=>{
+          const val=(table.cells[row]||{})[col.id]||'';
+          html+=`<td><div contenteditable="true"
+            onblur="updateFoodCell(${ti},'${esc(row)}','${col.id}',this.innerText.trim())"
+            style="min-height:1.3em;outline:none;cursor:text;white-space:pre-wrap;word-break:break-word;"
+          >${esc(val)}</div></td>`;
+        });
+        html+=`</tr>`;
+      });
+      html+=`</tbody></table>`;
+    }
+
+    html+=`</div>
+      <div class="caterer-add-bar">
+        <input type="text" id="food-new-row-${ti}" placeholder="Add a row (e.g. Appetizers)" onkeydown="if(event.key==='Enter')addFoodRow(${ti})" />
+        <button class="btn-small" onclick="addFoodRow(${ti})">+ Add row</button>
       </div>
-    </td>`;
-    d.cols.forEach(col=>{
-      const val=(d.cells[row]||{})[col.id]||'';
-      html+=`<td><div contenteditable="true"
-        onblur="updateCatererCell('${esc(row)}','${col.id}',this.innerText.trim())"
-        placeholder="—"
-        style="min-height:1.3em;outline:none;cursor:text;"
-      >${esc(val)||''}</div></td>`;
-    });
-    html+='</tr>';
+      <div class="caterer-add-bar" style="margin-top:.4rem;">
+        <input type="text" id="food-new-col-${ti}" placeholder="Add a column" onkeydown="if(event.key==='Enter')addFoodCol(${ti})" />
+        <button class="btn-small" onclick="addFoodCol(${ti})">+ Add column</button>
+      </div>
+    </div>`;
   });
-  html+='</tbody></table>';
-  container.innerHTML=html;
+
+  html+=`<button class="btn-primary" onclick="addFoodTable()" style="margin-top:.5rem;">+ Add another table</button>`;
+  body.innerHTML=html;
 }
 
-function updateCatererCol(ci,val){const d=getCatererData();d.cols[ci].name=val;saveCatererData(d);}
-function updateCatererCell(row,colId,val){
-  const d=getCatererData();
-  if(!d.cells[row])d.cells[row]={};
-  d.cells[row][colId]=val;
-  saveCatererData(d);
+function updateFoodTableName(ti,val){const t=getFoodTables();t[ti].name=val;saveFoodTables(t);}
+function updateFoodCol(ti,ci,val){const t=getFoodTables();t[ti].cols[ci].name=val;saveFoodTables(t);}
+function updateFoodCell(ti,row,colId,val){
+  const t=getFoodTables();
+  if(!t[ti].cells[row])t[ti].cells[row]={};
+  t[ti].cells[row][colId]=val;
+  saveFoodTables(t);
 }
-function addCatererRow(){
-  const inp=document.getElementById('caterer-new-row');
+function addFoodRow(ti){
+  const inp=document.getElementById('food-new-row-'+ti);
   if(!inp||!inp.value.trim())return;
-  const d=getCatererData();
-  d.rows.push(inp.value.trim());
-  saveCatererData(d);
-  inp.value='';
-  renderCatererTable();
+  const t=getFoodTables();
+  t[ti].rows.push(inp.value.trim());
+  saveFoodTables(t);inp.value='';renderAllFoodTables();
 }
-function removeCatererRow(row){
-  const d=getCatererData();
-  d.rows=d.rows.filter(r=>r!==row);
-  delete d.cells[row];
-  saveCatererData(d);
-  renderCatererTable();
+function removeFoodRow(ti,row){
+  const t=getFoodTables();
+  t[ti].rows=t[ti].rows.filter(r=>r!==row);
+  delete t[ti].cells[row];
+  saveFoodTables(t);renderAllFoodTables();
 }
-function addCatererCol(){
-  const inp=document.getElementById('caterer-new-col');
+function addFoodCol(ti){
+  const inp=document.getElementById('food-new-col-'+ti);
   if(!inp||!inp.value.trim())return;
-  const d=getCatererData();
-  const newId='cat'+Date.now();
-  d.cols.push({id:newId,name:inp.value.trim()});
-  saveCatererData(d);
-  inp.value='';
-  renderCatererTable();
+  const t=getFoodTables();
+  const newId='fc'+Date.now();
+  t[ti].cols.push({id:newId,name:inp.value.trim()});
+  saveFoodTables(t);inp.value='';renderAllFoodTables();
 }
-function removeCatererCol(ci){
-  if(!confirm('Remove this caterer column?'))return;
-  const d=getCatererData();
-  const colId=d.cols[ci].id;
-  d.cols.splice(ci,1);
-  Object.keys(d.cells).forEach(row=>delete d.cells[row][colId]);
-  saveCatererData(d);
-  renderCatererTable();
+function removeFoodCol(ti,ci){
+  if(!confirm('Remove this column?'))return;
+  const t=getFoodTables();
+  const colId=t[ti].cols[ci].id;
+  t[ti].cols.splice(ci,1);
+  Object.keys(t[ti].cells).forEach(row=>delete t[ti].cells[row][colId]);
+  saveFoodTables(t);renderAllFoodTables();
 }
-function dupCatererCol(ci){
-  const d=getCatererData();
-  const src=d.cols[ci];
-  const newId='cat'+Date.now();
-  d.cols.splice(ci+1,0,{id:newId,name:src.name+' (copy)'});
-  Object.keys(d.cells).forEach(row=>{
-    if(d.cells[row]&&d.cells[row][src.id]!==undefined)
-      d.cells[row][newId]=d.cells[row][src.id];
+function dupFoodCol(ti,ci){
+  const t=getFoodTables();
+  const src=t[ti].cols[ci];
+  const newId='fc'+Date.now();
+  t[ti].cols.splice(ci+1,0,{id:newId,name:src.name+' (copy)'});
+  Object.keys(t[ti].cells).forEach(row=>{
+    if(t[ti].cells[row]&&t[ti].cells[row][src.id]!==undefined)
+      t[ti].cells[row][newId]=t[ti].cells[row][src.id];
   });
-  saveCatererData(d);
-  renderCatererTable();
+  saveFoodTables(t);renderAllFoodTables();
+}
+function addFoodTable(){
+  const t=getFoodTables();
+  t.push({...EMPTY_FOOD_TABLE()});
+  saveFoodTables(t);renderAllFoodTables();
+}
+function removeFoodTable(ti){
+  if(!confirm('Remove this table?'))return;
+  const t=getFoodTables();
+  t.splice(ti,1);
+  saveFoodTables(t);renderAllFoodTables();
 }
 
 /* ══ VENUE COMPARISON TABLE ══ */
@@ -1810,6 +1835,12 @@ const DEFAULT_COMPARE_DATA = {
   totals: {'c1':'$63,613','c2':'$72,048','c3':'$87,405','c4':'$84,045+','c5':'$85,592','c6':'$87,405'},
 };
 
+
+function resetCompareToDefaults(){
+  if(!confirm('This will reset the comparison table to the latest default data. Your edits will be lost. Continue?'))return;
+  ss('compareData', DEFAULT_COMPARE_DATA);
+  renderCompareTable();
+}
 function getCompareData(){
   const saved = gs('compareData', null);
   if(saved) return saved;
@@ -2231,25 +2262,13 @@ initFirebase();
 </div>
 
 
-<!-- ── CATERER SUBPAGE ── -->
+<!-- ── FOOD COMPARISON SUBPAGE ── -->
 <div class="caterer-subpage" id="subpage-caterer">
   <div class="subpage-header">
     <button class="subpage-back" onclick="closeCatererPage()">← Back to Ceremony &amp; Reception</button>
-    <span class="subpage-title">Caterer Comparison</span>
+    <span class="subpage-title">Food Comparison</span>
   </div>
-  <div class="subpage-body">
-    <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;font-style:italic;">Compare menus side by side. Click any cell to edit. Add rows for courses or menu items, add columns for each caterer.</p>
-    <div class="caterer-table-wrap">
-      <div id="caterer-table-container"></div>
-    </div>
-    <div class="caterer-add-bar">
-      <input type="text" id="caterer-new-row" placeholder="Add a row (e.g. Appetizers, Main, Dessert)" onkeydown="if(event.key==='Enter')addCatererRow()" />
-      <button class="btn-small" onclick="addCatererRow()">+ Add row</button>
-    </div>
-    <div class="caterer-add-bar" style="margin-top:.4rem;">
-      <input type="text" id="caterer-new-col" placeholder="Add a caterer column" onkeydown="if(event.key==='Enter')addCatererCol()" />
-      <button class="btn-small" onclick="addCatererCol()">+ Add caterer</button>
-    </div>
+  <div class="subpage-body" id="caterer-subpage-body">
   </div>
 </div>
 
