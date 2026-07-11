@@ -280,7 +280,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 /* ── VENUE COMPARISON ── */
 .venue-compare-wrap{overflow-x:auto;margin-bottom:1.5rem;}
 .venue-compare-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px;}
-.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:nowrap;}
+.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:normal;word-break:break-word;min-width:120px;}
 .venue-compare-table th:first-child{background:var(--warm);color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;}
 .venue-compare-table td{padding:.55rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink);}
 .venue-compare-table td:first-child{font-size:.8rem;color:var(--muted);font-weight:400;background:var(--cream);white-space:nowrap;}
@@ -315,7 +315,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 /* ── VENUE COMPARISON ── */
 .venue-compare-wrap{overflow-x:auto;margin-bottom:1.5rem;}
 .venue-compare-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:700px;}
-.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:nowrap;}
+.venue-compare-table th{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;padding:.6rem .75rem;border-bottom:2px solid var(--green);color:var(--green-dk);text-align:left;background:var(--green-lt);white-space:normal;word-break:break-word;min-width:120px;}
 .venue-compare-table th:first-child{background:var(--warm);color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;}
 .venue-compare-table td{padding:.55rem .75rem;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink);}
 .venue-compare-table td:first-child{font-size:.8rem;color:var(--muted);font-weight:400;background:var(--cream);white-space:nowrap;}
@@ -1652,7 +1652,7 @@ function renderCompareTable(){
   const d = getCompareData();
 
   let html = '<div class="venue-compare-wrap"><table class="venue-compare-table"><thead><tr>';
-  html += '<th style="min-width:110px">Item</th>';
+  html += '<th style="min-width:110px">Venue</th>';
   d.cols.forEach((col,ci) => {
     html += `<th><input value="${esc(col.name)}" oninput="updateCompareCol(${ci},this.value)" placeholder="Venue name" />
       <button onclick="removeCompareCol(${ci})" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.7rem;float:right;padding:0;" title="Remove column">✕</button>
