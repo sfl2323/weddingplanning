@@ -1654,8 +1654,12 @@ function renderCompareTable(){
   let html = '<div class="venue-compare-wrap"><table class="venue-compare-table"><thead><tr>';
   html += '<th style="min-width:110px">Venue</th>';
   d.cols.forEach((col,ci) => {
-    html += `<th><input value="${esc(col.name)}" oninput="updateCompareCol(${ci},this.value)" placeholder="Venue name" />
-      <button onclick="removeCompareCol(${ci})" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.7rem;float:right;padding:0;" title="Remove column">✕</button>
+    html += `<th>
+      <div contenteditable="true" 
+        onblur="updateCompareCol(${ci},this.innerText.trim())"
+        style="min-width:100px;white-space:normal;word-break:break-word;outline:none;cursor:text;"
+      >${esc(col.name)}</div>
+      <button onclick="removeCompareCol(${ci})" style="background:none;border:none;color:var(--border);cursor:pointer;font-size:.7rem;float:right;padding:0;margin-top:2px;" title="Remove column">✕</button>
     </th>`;
   });
   html += '</tr></thead><tbody>';
