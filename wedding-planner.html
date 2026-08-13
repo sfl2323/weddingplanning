@@ -335,19 +335,22 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   50% { box-shadow: inset 3px 0 0 #e74c3c; background: #fff5f5; }
 }
 
+
 /* ── SUMMARY TAB ── */
-.summary-section { margin-bottom: 1.5rem; }
-.summary-section-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--green-dk); margin-bottom:.5rem; padding-bottom:.3rem; border-bottom:1px solid var(--border); font-style:italic; }
-.summary-task-row { display:flex; align-items:flex-start; gap:.65rem; padding:.6rem .9rem; background:var(--white); border:1px solid var(--border); border-radius:6px; margin-bottom:.4rem; transition:background .1s; }
-.summary-task-row.dl-overdue { animation:glowRed 2s ease-in-out infinite; }
-.summary-task-row.dl-overdue .summary-task-text { color:#c0392b; font-weight:500; }
-.summary-task-row.dl-now .summary-task-text { font-weight:500; }
-.summary-task-cb { accent-color:var(--green); flex-shrink:0; margin-top:2px; }
-.summary-task-text { font-size:.87rem; color:var(--ink); flex:1; cursor:pointer; }
-.summary-task-text.done { text-decoration:line-through; color:var(--muted); }
-.summary-tab-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; color:var(--white); background:var(--green); border-radius:99px; padding:1px 7px; flex-shrink:0; margin-top:2px; }
-.summary-dl-badge { font-size:.65rem; padding:1px 7px; border-radius:99px; border:1px solid var(--border); background:var(--warm); color:var(--muted); flex-shrink:0; }
-.summary-empty { text-align:center; padding:2rem; color:var(--muted); font-style:italic; font-size:.88rem; }
+.summary-section{margin-bottom:1.8rem;}
+.summary-section-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);margin-bottom:.6rem;letter-spacing:.1em;text-transform:uppercase;font-style:normal;font-weight:400;font-size:.72rem;}
+.summary-task-row{display:flex;align-items:center;gap:.65rem;padding:.65rem .9rem;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--border);border-radius:0 6px 6px 0;margin-bottom:.35rem;transition:background .15s;cursor:pointer;}
+.summary-task-row:hover{background:var(--green-lt);}
+.summary-task-row.dl-overdue{border-left-color:#c0392b;}
+.summary-task-row.dl-overdue .summary-task-text{color:#c0392b;}
+.summary-task-row.dl-now{border-left-color:var(--rose);}
+.summary-task-row.dl-soon{border-left-color:#b07030;}
+.summary-task-cb{accent-color:var(--green);flex-shrink:0;}
+.summary-task-text{font-size:.87rem;color:var(--ink);flex:1;font-weight:300;line-height:1.4;}
+.summary-task-text.done{text-decoration:line-through;color:var(--muted);}
+.summary-tab-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--green);background:var(--green-lt);border:1px solid var(--green-mid);border-radius:99px;padding:1px 8px;flex-shrink:0;white-space:nowrap;}
+.summary-dl-badge{font-size:.65rem;padding:1px 8px;border-radius:99px;border:1px solid var(--border);background:var(--warm);color:var(--muted);flex-shrink:0;white-space:nowrap;}
+.summary-empty{text-align:center;padding:2.5rem;color:var(--muted);font-style:italic;font-size:.88rem;}
 </style>
 </head>
 <body>
@@ -421,19 +424,22 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   50% { box-shadow: inset 3px 0 0 #e74c3c; background: #fff5f5; }
 }
 
+
 /* ── SUMMARY TAB ── */
-.summary-section { margin-bottom: 1.5rem; }
-.summary-section-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--green-dk); margin-bottom:.5rem; padding-bottom:.3rem; border-bottom:1px solid var(--border); font-style:italic; }
-.summary-task-row { display:flex; align-items:flex-start; gap:.65rem; padding:.6rem .9rem; background:var(--white); border:1px solid var(--border); border-radius:6px; margin-bottom:.4rem; transition:background .1s; }
-.summary-task-row.dl-overdue { animation:glowRed 2s ease-in-out infinite; }
-.summary-task-row.dl-overdue .summary-task-text { color:#c0392b; font-weight:500; }
-.summary-task-row.dl-now .summary-task-text { font-weight:500; }
-.summary-task-cb { accent-color:var(--green); flex-shrink:0; margin-top:2px; }
-.summary-task-text { font-size:.87rem; color:var(--ink); flex:1; cursor:pointer; }
-.summary-task-text.done { text-decoration:line-through; color:var(--muted); }
-.summary-tab-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; color:var(--white); background:var(--green); border-radius:99px; padding:1px 7px; flex-shrink:0; margin-top:2px; }
-.summary-dl-badge { font-size:.65rem; padding:1px 7px; border-radius:99px; border:1px solid var(--border); background:var(--warm); color:var(--muted); flex-shrink:0; }
-.summary-empty { text-align:center; padding:2rem; color:var(--muted); font-style:italic; font-size:.88rem; }
+.summary-section{margin-bottom:1.8rem;}
+.summary-section-title{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);margin-bottom:.6rem;letter-spacing:.1em;text-transform:uppercase;font-style:normal;font-weight:400;font-size:.72rem;}
+.summary-task-row{display:flex;align-items:center;gap:.65rem;padding:.65rem .9rem;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--border);border-radius:0 6px 6px 0;margin-bottom:.35rem;transition:background .15s;cursor:pointer;}
+.summary-task-row:hover{background:var(--green-lt);}
+.summary-task-row.dl-overdue{border-left-color:#c0392b;}
+.summary-task-row.dl-overdue .summary-task-text{color:#c0392b;}
+.summary-task-row.dl-now{border-left-color:var(--rose);}
+.summary-task-row.dl-soon{border-left-color:#b07030;}
+.summary-task-cb{accent-color:var(--green);flex-shrink:0;}
+.summary-task-text{font-size:.87rem;color:var(--ink);flex:1;font-weight:300;line-height:1.4;}
+.summary-task-text.done{text-decoration:line-through;color:var(--muted);}
+.summary-tab-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--green);background:var(--green-lt);border:1px solid var(--green-mid);border-radius:99px;padding:1px 8px;flex-shrink:0;white-space:nowrap;}
+.summary-dl-badge{font-size:.65rem;padding:1px 8px;border-radius:99px;border:1px solid var(--border);background:var(--warm);color:var(--muted);flex-shrink:0;white-space:nowrap;}
+.summary-empty{text-align:center;padding:2.5rem;color:var(--muted);font-style:italic;font-size:.88rem;}
 </style>
 
 <header>
@@ -457,18 +463,18 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="switchTab('planning',this)">Foundation</button>
+  <button class="tab-btn active" onclick="switchTab('summary',this)">Summary</button>
+  <button class="tab-btn" onclick="switchTab('planning',this)">Foundation</button>
   <button class="tab-btn" onclick="switchTab('attire',this)">Attire &amp; Décor</button>
   <button class="tab-btn" onclick="switchTab('guests',this)">Guests &amp; Invitations</button>
   <button class="tab-btn" onclick="switchTab('ceremony',this)">Ceremony &amp; Reception</button>
   <button class="tab-btn" onclick="switchTab('dayof',this)">Day Of</button>
-  <button class="tab-btn" onclick="switchTab('budget',this)">Budget</button>
+  <button class="tab-btn" onclick="switchTab('supplies',this)">Supplies</button>
   <button class="tab-btn" onclick="switchTab('notes',this)">Notes</button>
-  <button class="tab-btn" onclick="switchTab('summary',this)">Summary</button>
 </nav>
 
 <!-- ═══════ TAB 1: PLANNING ═══════ -->
-<section class="section active" id="tab-planning">
+<section class="section" id="tab-planning">
   <div class="section-title-row"><h2>Foundation</h2><span class="section-subtitle">The basics</span></div>
   <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="pl-prog-fill" style="width:0%"></div></div><div class="progress-label" id="pl-prog-label"></div></div>
   <input class="search-bar" type="text" id="pl-search" placeholder="Search tasks…" oninput="renderTab('planning')" />
@@ -556,17 +562,10 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   </div>
   <p class="subsection-label" style="margin-top:2rem">Day-of logistics</p>
   <div id="do-wrap"></div>
-  <p class="subsection-label" style="margin-top:2rem">Supplies &amp; packing list</p>
-  <div class="filter-row">
-    <button class="filter-pill active" onclick="setSupplyFilter('all',this)">All</button>
-    <button class="filter-pill" onclick="setSupplyFilter('unpacked',this)">Still to pack</button>
-    <button class="filter-pill" onclick="setSupplyFilter('packed',this)">Packed ✓</button>
-  </div>
-  <div class="supply-grid" id="supply-wrap"></div>
 </section>
 
-<!-- ═══════ TAB 6: BUDGET ═══════ -->
-<section class="section" id="tab-budget">
+<!-- ═══════ BUDGET (hidden) ═══════ -->
+<section class="section" id="tab-budget" style="display:none!important;">
   <div class="section-title-row"><h2>Budget</h2><span class="section-subtitle">Track every dollar</span></div>
   <div class="budget-summary">
     <div class="budget-card"><div class="budget-card-label">Total budget</div><div class="budget-card-value" id="b-total-budget">$0</div></div>
@@ -608,7 +607,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 </section>
 
 <!-- ═══════ SUMMARY TAB ═══════ -->
-<section class="section" id="tab-summary">
+<section class="section active" id="tab-summary">
   <div class="section-title-row"><h2>Summary</h2><span class="section-subtitle">What needs attention now</span></div>
   <div id="summary-wrap"></div>
 </section>
@@ -772,19 +771,23 @@ function updateCountdown(){
 dateInput.addEventListener('change',()=>{ss('weddingDate',dateInput.value);updateCountdown();});
 guestInput.addEventListener('input',()=>ss('guestCount',guestInput.value));
 const venueInput=document.getElementById('venue-name');
-venueInput.value=gs('venueName','');
-venueInput.addEventListener('input',()=>ss('venueName',venueInput.value));
+if(venueInput){
+  venueInput.value=gs('venueName','');
+  venueInput.addEventListener('input',()=>ss('venueName',venueInput.value));
+}
 updateCountdown();
 
 /* ══ TABS ══ */
 function switchTab(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  btn.classList.add('active');
-  if(id==='budget')renderBudget();
+  const section=document.getElementById('tab-'+id);
+  if(section)section.classList.add('active');
+  if(btn)btn.classList.add('active');
   if(id==='notes')renderNotes();
   if(id==='summary')renderSummary();
+  if(id==='supplies')renderSupplies();
+  if(id==='venues'){setTimeout(()=>{renderVenues();renderCompareTable();},10);}
 }
 
 /* ══════════════════════════════════════════════
@@ -1077,8 +1080,9 @@ const TABS={
         {id:'vd-cater',    l:'Confirm menu options with banquet hall',        dl:'Mar – May 2027'},
         {id:'vd-dj',       l:'Research and book band or DJ',                 dl:'Oct – Dec 2026'},
         {id:'vd-hair',     l:'Research and book hair & makeup artist(s)',    dl:'Feb – Apr 2027'},
-        {id:'vd-transport',l:'Book transportation',                          dl:'Mar – May 2027'},
+        {id:'vd-transport',l:'Book limo / wedding car',                      dl:'Mar – May 2027'},
         {id:'vd-coord',    l:'Hire day-of coordinator (optional)',           dl:'Mar – May 2027'},
+        {id:'vd-decor',    l:'Research and book decorator / florist',          dl:'Mar – May 2027'},
       ]},
     ]
   },
@@ -1086,8 +1090,14 @@ const TABS={
     progFill:'at-prog-fill',progLabel:'at-prog-label',search:'at-search',wrap:'at-wrap',
     categories:[
       {id:'attire',name:'Attire',color:'#D4537E',tasks:[
-        {id:'at-shop',    l:'Shop for wedding dress / suit / attire',        dl:'Feb – Apr 2027'},
-        {id:'at-order',   l:'Order wedding dress (allow time for alterations)',dl:'Feb – Apr 2027'},
+        {id:'at-trip',    l:'Shanghai / Vietnam dress shopping trip (April)',  dl:'Apr 2027'},
+        {id:'at-dress1',  l:'Wedding dress — source in Shanghai / Vietnam',     dl:'Apr 2027'},
+        {id:'at-dress2',  l:'Qipao (Chinese tea ceremony) — source in Shanghai / Vietnam', dl:'Apr 2027'},
+        {id:'at-dress3',  l:'Reception dress — source in Shanghai / Vietnam',   dl:'Apr 2027'},
+        {id:'at-dress4',  l:'Farewell / send-off dress (送客袍) — source in Shanghai / Vietnam', dl:'Apr 2027'},
+        {id:'at-dress5',  l:'Ao dai (Vietnamese tea ceremony) — source in Vietnam', dl:'Apr 2027'},
+        {id:'at-shop',    l:'Arrange alterations after returning (allow 2–3 months)', dl:'May – Jul 2027'},
+        {id:'at-order',   l:'Confirm all dresses fit and are ready',            dl:'Aug – Sep 2027'},
         {id:'at-bm',      l:'Choose and order bridesmaid dresses',           dl:'Mar – May 2027'},
         {id:'at-gm',      l:'Arrange groomsmen attire',                      dl:'Mar – May 2027'},
         {id:'at-fit',     l:'Schedule dress fittings and alterations',       dl:'May – Aug 2027'},
@@ -1152,11 +1162,17 @@ const TABS={
         {id:'tc-supplies',l:'Source tea ceremony supplies (tea set, tray, cups)', dl:'May – Aug 2027'},
         {id:'tc-cn-order',l:'Plan Chinese tea ceremony order and traditions',  dl:'Aug – Oct 2027'},
         {id:'tc-vn-order',l:'Plan Vietnamese tea ceremony order and traditions', dl:'Aug – Oct 2027'},
+        {id:'tc-cn-attire',l:'Source / buy Chinese tea ceremony attire (qipao / kua)', dl:'May – Aug 2027'},
+        {id:'tc-vn-attire',l:'Source / buy Vietnamese tea ceremony attire (ao dai)', dl:'May – Aug 2027'},
+        {id:'tc-family2',l:'Plan tea ceremony order with both families — who pours, who receives', dl:'Aug – Oct 2027'},
+        {id:'tc-purchase',l:'Purchase tea ceremony supplies (tea set, tray, red dates, peanuts, longan, lily bulbs, red envelopes)', dl:'Aug – Oct 2027'},
+        {id:'tc-emcee',  l:'Hire bilingual / trilingual emcee',             dl:'Mar – May 2027'},
       ]},
       {id:'ceremony-details',name:'American ceremony',color:'#7a3f35',tasks:[
         {id:'ce-vows',    l:'Write vows',                                     dl:'May – Aug 2027'},
         {id:'ce-runsheet',l:'Plan ceremony order of events / runsheet',       dl:'Aug – Oct 2027'},
         {id:'ce-party',   l:'Choose wedding party roles and assign duties',   dl:'Aug – Oct 2027'},
+        {id:'ce-license',  l:'Apply for marriage license (NY — no waiting period; valid 60 days)', dl:'Oct – Nov 2027'},
       ]},
       {id:'reception',name:'Reception',color:'#3d6b52',tasks:[
         {id:'r-first',    l:'Choose first dance song',                        dl:'May – Aug 2027'},
@@ -1191,7 +1207,8 @@ const DAYOF_CAT={
     {id:'do-confirm',     l:'Confirm all vendors with final details and timing', dl:'Early Nov 2027'},
     {id:'do-gifts',       l:'Designate someone to collect cards and gifts',  dl:'Early Nov 2027'},
     {id:'do-cleanup',     l:'Arrange for rental returns and venue cleanup',  dl:'Early Nov 2027'},
-    {id:'do-envelopes',   l:'Prepare vendor payment and tip envelopes',      dl:'Mid Nov 2027'},
+    {id:'do-envelopes',   l:'Prepare vendor payment envelopes',              dl:'Mid Nov 2027'},
+    {id:'do-tips',       l:'Prepare tip envelopes for all vendors',           dl:'Mid Nov 2027'},
     {id:'do-kit',         l:'Pack a wedding day emergency kit',              dl:'Mid Nov 2027'},
   ]
 };
@@ -1320,7 +1337,12 @@ function openPage(panel){
 
 function closePage(){
   document.querySelectorAll('.subpage').forEach(p=>p.classList.remove('active'));
-  renderTab('planning');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector('.tab-btn[onclick*=\"summary\"]');
+  const sec=document.getElementById('tab-summary');
+  if(btn)btn.classList.add('active');
+  if(sec)sec.classList.add('active');
+  renderSummary();
 }
 
 function renderTab(tab){
@@ -1353,7 +1375,7 @@ function renderDayOfChecklist(){
   if(isOpen){
     tasks.forEach(t=>{
       const ts=getTask(t.id);
-      const dlClassDO=ts.done?'':''+getDeadlineClass(t.dl);
+      const dlClassDO=ts.done?'':getDeadlineClass(t.dl);
         html+=`<div class="task-row${ts.done?' done':''} ${dlClassDO}">
         <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTaskDO('${t.id}')" aria-label="${t.l}">
         <div class="task-content">
@@ -1400,6 +1422,7 @@ function fmtTime(t){if(!t)return'';const[h,m]=t.split(':').map(Number);return(h%
 function renderAgenda(){
   const events=getAgenda().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
   const wrap=document.getElementById('agenda-wrap');
+  if(!wrap)return;
   if(!events.length){wrap.innerHTML='<div class="empty-agenda">No events yet — add your first one below ✦</div>';return;}
   let html='<div class="agenda-grid">';
   events.forEach((ev,i)=>{
@@ -1462,16 +1485,35 @@ const SUPPLY_CATS=[
     {id:'s_p3',l:'Comfortable shoes for dancing'},{id:'s_p4',l:'ID'},
     {id:'s_p5',l:'Medications'},{id:'s_p6',l:'Skincare / toiletries'},
   ]},
+  {id:'tea-ceremony-supplies',name:'Tea ceremony supplies',color:'#c4370a',items:[
+    {id:'s_t1',l:'Teapot'},
+    {id:'s_t2',l:'Small tea cups (at least 6–8)'},
+    {id:'s_t3',l:'Serving tray'},
+    {id:'s_t4',l:'Red tray cloth or cover'},
+    {id:'s_t5',l:'Red dates (大枣 — dà zǎo)'},
+    {id:'s_t6',l:'Peanuts (花生 — huā shēng)'},
+    {id:'s_t7',l:'Longan (桂圆 — guì yuán)'},
+    {id:'s_t8',l:'Lily bulbs (百合 — bǎi hé)'},
+    {id:'s_t9',l:'Lotus seeds (莲子 — lián zǐ) — optional'},
+    {id:'s_t10',l:'Red envelopes (for tea ceremony gifts)'},
+    {id:'s_t11',l:'Betel leaf tray (Vietnamese ceremony)'},
+    {id:'s_t12',l:'Ceremonial lacquer box set (Vietnamese ceremony)'},
+    {id:'s_t13',l:'Ao dai (Vietnamese tea ceremony outfit)'},
+    {id:'s_t14',l:'Qipao / kua (Chinese tea ceremony outfit)'},
+    {id:'s_t15',l:'Extra outfit change accessories (pins, tape, touch-up kit)'},
+  ]},
 ];
 let supplyFilter='all';
 function getSupply(id){return S['sup_'+id]||{packed:false};}
 function setSupply(id,patch){S['sup_'+id]={...getSupply(id),...patch};saveLocal(S);}
 function setSupplyFilter(f,btn){
   supplyFilter=f;
-  document.querySelectorAll('#tab-dayof .filter-pill').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#tab-supplies .filter-pill, #tab-dayof .filter-pill').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');renderSupplies();
 }
 function renderSupplies(){
+  const supWrap=document.getElementById('supply-wrap');
+  if(!supWrap)return;
   let html='';
   SUPPLY_CATS.forEach(cat=>{
     const extra=gs('supExtra_'+cat.id,[]);
@@ -1588,7 +1630,6 @@ function renderParty(){
   // Show ALL roles always
   wrap.innerHTML=PARTY_ROLES.map(role=>{
     const members=party[role]||[];
-    if(false) return ''; // never hide
     return`<div class="party-role-section" 
         ondragover="partyDragOver(event,'${role}')" 
         ondrop="partyDrop(event,'${role}')"
@@ -1631,7 +1672,7 @@ function partyDragOver(e,role){
 }
 function partyDragLeave(e){
   const section=e.currentTarget;
-  if(!section.contains(e.relatedTarget)){
+  if(section&&!section.contains(e.relatedTarget)){
     section.classList.remove('drag-over');
   }
 }
@@ -2187,7 +2228,7 @@ function renderSummary(){
   });
 
   if(!overdue.length&&!urgent.length&&!soon.length){
-    wrap.innerHTML='<div class="summary-empty">You're all caught up! No urgent tasks right now ✦</div>';
+    wrap.innerHTML=`<div class="summary-empty">You're all caught up! No urgent tasks right now ✦</div>`;
     return;
   }
 
@@ -2197,13 +2238,12 @@ function renderSummary(){
       <div class="summary-section-title">${title} (${items.length})</div>
       ${items.map(item=>{
         const ts=getTask(item.id);
-        return`<div class="summary-task-row ${item.cls}">
+        return`<div class="summary-task-row ${item.cls}" 
+          onclick="jumpToTask('${item.tab}','${item.id}','${item.catId}',${!!item.isDayOf})">
           <input type="checkbox" class="summary-task-cb" ${ts.done?'checked':''} 
-            onchange="toggleSummaryTask('${item.id}','${item.tab}','${item.catId}',${!!item.isDayOf})" />
+            onchange="event.stopPropagation();toggleSummaryTask('${item.id}','${item.tab}','${item.catId}',${!!item.isDayOf})" />
           <div style="flex:1;min-width:0;">
-            <div class="summary-task-text${ts.done?' done':''}" 
-              onclick="jumpToTask('${item.tab}','${item.id}','${item.catId}',${!!item.isDayOf})"
-            >${item.label}</div>
+            <div class="summary-task-text${ts.done?' done':''}">${item.label}</div>
           </div>
           <span class="summary-tab-label">${item.tabLabel}</span>
           ${item.dl?`<span class="summary-dl-badge">${item.dl}</span>`:''}
@@ -2213,9 +2253,9 @@ function renderSummary(){
   }
 
   wrap.innerHTML=
-    renderGroup(overdue,'⚠ Overdue')+
-    renderGroup(urgent,'🔴 Do now')+
-    renderGroup(soon,'🟡 Coming up');
+    renderGroup(overdue,'Overdue')+
+    renderGroup(urgent,'Do now')+
+    renderGroup(soon,'Coming up');
 }
 
 function toggleSummaryTask(taskId,tab,catId,isDayOf){
@@ -2255,6 +2295,7 @@ function getAllSearchableTasks(){
 
 function globalSearch(val){
   const dropdown=document.getElementById('search-dropdown');
+  if(!dropdown)return;
   if(!val.trim()){dropdown.classList.remove('open');return;}
   const q=val.toLowerCase();
   const all=getAllSearchableTasks();
@@ -2276,38 +2317,39 @@ function globalSearch(val){
 }
 
 function jumpToTask(tabId, taskId, catId, isDayOf){
-  // Close search
-  document.getElementById('search-dropdown').classList.remove('open');
-  document.getElementById('global-search').value='';
+  // Close search dropdown if open
+  const dd=document.getElementById('search-dropdown');
+  if(dd)dd.classList.remove('open');
+  const gs_el=document.getElementById('global-search');
+  if(gs_el)gs_el.value='';
   // Close any open subpages
   document.querySelectorAll('.subpage').forEach(p=>p.classList.remove('active'));
   // Switch to correct tab
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const targetSection=document.getElementById('tab-'+tabId);
+  if(targetSection)targetSection.classList.add('active');
   const tabBtn=document.querySelector(`.tab-btn[onclick*="'${tabId}'"]`);
-  if(tabBtn){
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-'+tabId).classList.add('active');
-    tabBtn.classList.add('active');
-    if(tabId==='budget')renderBudget();
-    if(tabId==='notes')renderNotes();
-  }
+  if(tabBtn)tabBtn.classList.add('active');
+  if(tabId==='budget')renderBudget();
+  if(tabId==='notes')renderNotes();
   // Expand the category if collapsed
   if(collapsed[catId]){
     collapsed[catId]=false;
     ss('collapsed',collapsed);
-    if(!isDayOf)renderTab(tabId);
-    else renderDayOfChecklist();
   }
-  // Scroll to the task after a short delay for render
+  if(!isDayOf)renderTab(tabId);
+  else renderDayOfChecklist();
+  // Scroll to the task and flash it
   setTimeout(()=>{
     const el=document.getElementById('tr-'+taskId);
     if(el){
       el.scrollIntoView({behavior:'smooth',block:'center'});
-      el.style.transition='background .3s';
+      el.style.transition='background .4s';
       el.style.background='var(--green-lt)';
-      setTimeout(()=>el.style.background='',1800);
+      setTimeout(()=>{el.style.background='';},2000);
     }
-  },120);
+  },150);
 }
 
 // Close dropdown when clicking outside
@@ -2328,9 +2370,21 @@ function initApp(){
   renderBudget();
   renderNotes();
   renderSummary();
+  renderSupplies();
 }
 initFirebase();
 </script>
+
+<!-- ═══════ TAB: SUPPLIES ═══════ -->
+<section class="section" id="tab-supplies">
+  <div class="section-title-row"><h2>Supplies</h2><span class="section-subtitle">Everything to pack &amp; bring</span></div>
+  <div class="filter-row">
+    <button class="filter-pill active" onclick="setSupplyFilter('all',this)">All</button>
+    <button class="filter-pill" onclick="setSupplyFilter('unpacked',this)">Still to pack</button>
+    <button class="filter-pill" onclick="setSupplyFilter('packed',this)">Packed ✓</button>
+  </div>
+  <div class="supply-grid" id="supply-wrap"></div>
+</section>
 
 <!-- ═══════ TAB: NOTES ═══════ -->
 <section class="section" id="tab-notes">
