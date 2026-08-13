@@ -321,6 +321,33 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .caterer-add-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.75rem;}
 .caterer-add-bar input{padding:5px 9px;border:1px solid var(--border);border-radius:5px;font-family:'Jost',sans-serif;font-size:.79rem;background:var(--white);color:var(--ink);min-width:180px;}
 .caterer-add-bar input:focus{outline:none;border-color:var(--green);}
+
+/* ── DEADLINE HIGHLIGHTS ── */
+.task-row.dl-overdue { animation: glowRed 2s ease-in-out infinite; }
+.task-row.dl-overdue .task-text { color: #c0392b; font-weight: 500; }
+.task-row.dl-overdue .deadline-badge { background: #fdecea; border-color: #f5c0bb; color: #c0392b; font-weight: 500; }
+.task-row.dl-now .task-text { color: var(--ink); font-weight: 500; }
+.task-row.dl-now .deadline-badge { background: #fdecea; border-color: #f5c0bb; color: #c0392b; font-weight: 500; }
+.task-row.dl-soon .deadline-badge { background: #fdf6ed; border-color: #f0d9b8; color: #b07030; }
+.task-row.dl-later .deadline-badge { background: var(--warm); border-color: var(--border); color: var(--muted); }
+@keyframes glowRed {
+  0%,100% { box-shadow: none; background: transparent; }
+  50% { box-shadow: inset 3px 0 0 #e74c3c; background: #fff5f5; }
+}
+
+/* ── SUMMARY TAB ── */
+.summary-section { margin-bottom: 1.5rem; }
+.summary-section-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--green-dk); margin-bottom:.5rem; padding-bottom:.3rem; border-bottom:1px solid var(--border); font-style:italic; }
+.summary-task-row { display:flex; align-items:flex-start; gap:.65rem; padding:.6rem .9rem; background:var(--white); border:1px solid var(--border); border-radius:6px; margin-bottom:.4rem; transition:background .1s; }
+.summary-task-row.dl-overdue { animation:glowRed 2s ease-in-out infinite; }
+.summary-task-row.dl-overdue .summary-task-text { color:#c0392b; font-weight:500; }
+.summary-task-row.dl-now .summary-task-text { font-weight:500; }
+.summary-task-cb { accent-color:var(--green); flex-shrink:0; margin-top:2px; }
+.summary-task-text { font-size:.87rem; color:var(--ink); flex:1; cursor:pointer; }
+.summary-task-text.done { text-decoration:line-through; color:var(--muted); }
+.summary-tab-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; color:var(--white); background:var(--green); border-radius:99px; padding:1px 7px; flex-shrink:0; margin-top:2px; }
+.summary-dl-badge { font-size:.65rem; padding:1px 7px; border-radius:99px; border:1px solid var(--border); background:var(--warm); color:var(--muted); flex-shrink:0; }
+.summary-empty { text-align:center; padding:2rem; color:var(--muted); font-style:italic; font-size:.88rem; }
 </style>
 </head>
 <body>
@@ -380,6 +407,33 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .caterer-add-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.75rem;}
 .caterer-add-bar input{padding:5px 9px;border:1px solid var(--border);border-radius:5px;font-family:'Jost',sans-serif;font-size:.79rem;background:var(--white);color:var(--ink);min-width:180px;}
 .caterer-add-bar input:focus{outline:none;border-color:var(--green);}
+
+/* ── DEADLINE HIGHLIGHTS ── */
+.task-row.dl-overdue { animation: glowRed 2s ease-in-out infinite; }
+.task-row.dl-overdue .task-text { color: #c0392b; font-weight: 500; }
+.task-row.dl-overdue .deadline-badge { background: #fdecea; border-color: #f5c0bb; color: #c0392b; font-weight: 500; }
+.task-row.dl-now .task-text { color: var(--ink); font-weight: 500; }
+.task-row.dl-now .deadline-badge { background: #fdecea; border-color: #f5c0bb; color: #c0392b; font-weight: 500; }
+.task-row.dl-soon .deadline-badge { background: #fdf6ed; border-color: #f0d9b8; color: #b07030; }
+.task-row.dl-later .deadline-badge { background: var(--warm); border-color: var(--border); color: var(--muted); }
+@keyframes glowRed {
+  0%,100% { box-shadow: none; background: transparent; }
+  50% { box-shadow: inset 3px 0 0 #e74c3c; background: #fff5f5; }
+}
+
+/* ── SUMMARY TAB ── */
+.summary-section { margin-bottom: 1.5rem; }
+.summary-section-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--green-dk); margin-bottom:.5rem; padding-bottom:.3rem; border-bottom:1px solid var(--border); font-style:italic; }
+.summary-task-row { display:flex; align-items:flex-start; gap:.65rem; padding:.6rem .9rem; background:var(--white); border:1px solid var(--border); border-radius:6px; margin-bottom:.4rem; transition:background .1s; }
+.summary-task-row.dl-overdue { animation:glowRed 2s ease-in-out infinite; }
+.summary-task-row.dl-overdue .summary-task-text { color:#c0392b; font-weight:500; }
+.summary-task-row.dl-now .summary-task-text { font-weight:500; }
+.summary-task-cb { accent-color:var(--green); flex-shrink:0; margin-top:2px; }
+.summary-task-text { font-size:.87rem; color:var(--ink); flex:1; cursor:pointer; }
+.summary-task-text.done { text-decoration:line-through; color:var(--muted); }
+.summary-tab-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.07em; color:var(--white); background:var(--green); border-radius:99px; padding:1px 7px; flex-shrink:0; margin-top:2px; }
+.summary-dl-badge { font-size:.65rem; padding:1px 7px; border-radius:99px; border:1px solid var(--border); background:var(--warm); color:var(--muted); flex-shrink:0; }
+.summary-empty { text-align:center; padding:2rem; color:var(--muted); font-style:italic; font-size:.88rem; }
 </style>
 
 <header>
@@ -388,6 +442,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   <div class="header-fields">
     <div class="header-field"><label for="wedding-date">Wedding date</label><input type="date" id="wedding-date" /></div>
     <div class="header-field"><label for="guest-count">Guests</label><input type="number" id="guest-count" placeholder="0" min="0" /></div>
+    <div class="header-field"><label for="venue-name">Venue</label><input type="text" id="venue-name" placeholder="Venue name" style="min-width:160px;" /></div>
   </div>
   <div id="countdown-display"></div>
   <div class="global-search-wrap">
@@ -409,6 +464,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
   <button class="tab-btn" onclick="switchTab('dayof',this)">Day Of</button>
   <button class="tab-btn" onclick="switchTab('budget',this)">Budget</button>
   <button class="tab-btn" onclick="switchTab('notes',this)">Notes</button>
+  <button class="tab-btn" onclick="switchTab('summary',this)">Summary</button>
 </nav>
 
 <!-- ═══════ TAB 1: PLANNING ═══════ -->
@@ -549,6 +605,12 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
       <button class="btn-primary" onclick="addBudgetItem()">+ Add</button>
     </div>
   </div>
+</section>
+
+<!-- ═══════ SUMMARY TAB ═══════ -->
+<section class="section" id="tab-summary">
+  <div class="section-title-row"><h2>Summary</h2><span class="section-subtitle">What needs attention now</span></div>
+  <div id="summary-wrap"></div>
 </section>
 
 <footer>Made with love · Everything saves automatically in your browser</footer>
@@ -709,6 +771,9 @@ function updateCountdown(){
 }
 dateInput.addEventListener('change',()=>{ss('weddingDate',dateInput.value);updateCountdown();});
 guestInput.addEventListener('input',()=>ss('guestCount',guestInput.value));
+const venueInput=document.getElementById('venue-name');
+venueInput.value=gs('venueName','');
+venueInput.addEventListener('input',()=>ss('venueName',venueInput.value));
 updateCountdown();
 
 /* ══ TABS ══ */
@@ -719,6 +784,7 @@ function switchTab(id,btn){
   btn.classList.add('active');
   if(id==='budget')renderBudget();
   if(id==='notes')renderNotes();
+  if(id==='summary')renderSummary();
 }
 
 /* ══════════════════════════════════════════════
@@ -995,6 +1061,8 @@ const TABS={
         {id:'bp-guests', l:'Decide on a rough guest count',                  dl:'Jul – Sep 2026'},
         {id:'bp-date',   l:'Choose a wedding date or date range',            dl:'Jul – Sep 2026'},
         {id:'bp-vibe',   l:'Pick your general vibe / theme',                 dl:'Aug – Sep 2026'},
+        {id:'bp-hall',   l:'Confirm banquet hall minimum table and guest requirements', dl:'Aug – Nov 2026'},
+        {id:'bp-tables', l:'Decide on number of tables and seating layout',         dl:'Oct – Dec 2026'},
       ]},
       {id:'wedding-party-panel',name:'Wedding Party',color:'#3d6b52',panel:'party'},
       {id:'big-venue-checklist',name:'Venues',color:'#7a3f35',panel:'venues',tasks:[
@@ -1006,7 +1074,7 @@ const TABS={
       {id:'vendors-checklist',name:'Vendors',color:'#D85A30',panel:'vendors',tasks:[
         {id:'vd-photo',    l:'Research and book photographer',               dl:'Oct – Dec 2026'},
         {id:'vd-video',    l:'Research and book videographer',               dl:'Oct – Dec 2026'},
-        {id:'vd-cater',    l:'Research and book caterer',                    dl:'Oct – Dec 2026'},
+        {id:'vd-cater',    l:'Confirm menu options with banquet hall',        dl:'Mar – May 2027'},
         {id:'vd-dj',       l:'Research and book band or DJ',                 dl:'Oct – Dec 2026'},
         {id:'vd-hair',     l:'Research and book hair & makeup artist(s)',    dl:'Feb – Apr 2027'},
         {id:'vd-transport',l:'Book transportation',                          dl:'Mar – May 2027'},
@@ -1103,7 +1171,7 @@ const TABS={
       ]},
       {id:'food',name:'Food & drink',color:'#BA7517',panel:'caterer',tasks:[
         {id:'f-style',    l:'Decide on menu style (plated, buffet, family-style)', dl:'Oct – Dec 2026'},
-        {id:'f-tasting',  l:'Schedule caterer tasting',                       dl:'Mar – May 2027'},
+        {id:'f-tasting',  l:'Schedule tasting with banquet hall',             dl:'Mar – May 2027'},
         {id:'f-menu',     l:'Finalize menu and confirm dietary accommodations', dl:'May – Aug 2027'},
         {id:'f-bar',      l:'Plan bar menu and alcohol selection',             dl:'May – Aug 2027'},
         {id:'f-cake',     l:'Plan wedding cake / desserts (DIY or order)',     dl:'May – Aug 2027'},
@@ -1170,7 +1238,8 @@ function renderCatHTML(cat,tab,f,search){
       </div>`;
       tasks.forEach(t=>{
         const ts=getTask(t.id);
-        html+=`<div class="task-row${ts.done?' done':''}">
+        const dlClass2=ts.done?'':getDeadlineClass(t.dl);
+        html+=`<div class="task-row${ts.done?' done':''} ${dlClass2}">
           <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
           <div class="task-content">
             <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">${t.l}<span class="deadline-badge">${t.dl||''}</span></div>
@@ -1211,7 +1280,8 @@ function renderCatHTML(cat,tab,f,search){
   if(isOpen){
     tasks.forEach(t=>{
       const ts=getTask(t.id);
-      html+=`<div class="task-row${ts.done?' done':''}">
+      const dlClass=ts.done?'':getDeadlineClass(t.dl);
+      html+=`<div class="task-row${ts.done?' done':''} ${dlClass}">
         <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
         <div class="task-content">
           <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">${t.l}<span class="deadline-badge">${t.dl||''}</span></div>
@@ -1283,7 +1353,8 @@ function renderDayOfChecklist(){
   if(isOpen){
     tasks.forEach(t=>{
       const ts=getTask(t.id);
-      html+=`<div class="task-row${ts.done?' done':''}">
+      const dlClassDO=ts.done?'':''+getDeadlineClass(t.dl);
+        html+=`<div class="task-row${ts.done?' done':''} ${dlClassDO}">
         <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTaskDO('${t.id}')" aria-label="${t.l}">
         <div class="task-content">
           <div class="task-text" onclick="toggleTaskDO('${t.id}')">${t.l}<span class="deadline-badge">${t.dl||''}</span></div>
@@ -1514,15 +1585,10 @@ function renderParty(){
   const party=getParty();
   const wrap=document.getElementById('party-wrap');
   if(!wrap)return;
-  const populated=PARTY_ROLES.filter(r=>party[r]&&party[r].length);
-  if(!populated.length){
-    wrap.innerHTML='<p style="color:var(--muted);font-style:italic;font-size:.85rem;padding:.5rem 0;">No one added yet — use the form below to build your wedding party.</p>';
-    return;
-  }
-  // Show all roles (populated ones + empty ones as drop targets)
+  // Show ALL roles always
   wrap.innerHTML=PARTY_ROLES.map(role=>{
     const members=party[role]||[];
-    if(!members.length && !populated.includes(role)) return ''; // hide empty roles unless populated
+    if(false) return ''; // never hide
     return`<div class="party-role-section" 
         ondragover="partyDragOver(event,'${role}')" 
         ondrop="partyDrop(event,'${role}')"
@@ -2046,6 +2112,118 @@ function duplicateCompareCol(ci){
   renderCompareTable();
 }
 
+
+/* ── DEADLINE CLASSIFIER ── */
+const MONTH_MAP = {
+  'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'jun':5,
+  'jul':6,'aug':7,'sep':8,'oct':9,'nov':10,'dec':11
+};
+
+function parseDeadlineDate(dl) {
+  if(!dl || dl==='Custom') return null;
+  const s = dl.toLowerCase();
+  // Handle "mid nov 2027", "early nov 2027"
+  const prefixed = s.match(/(?:early|mid|late)\s+([a-z]+)\s+(\d{4})/);
+  if(prefixed) return new Date(parseInt(prefixed[2]), MONTH_MAP[prefixed[1].slice(0,3)]||0, 1);
+  // Handle "nov 2027"
+  const single = s.match(/^([a-z]+)\s+(\d{4})$/);
+  if(single) return new Date(parseInt(single[2]), MONTH_MAP[single[1].slice(0,3)]||0, 1);
+  // Handle "aug – nov 2026" or "aug – sep 2026" — use the END month
+  const range = s.match(/[a-z]+\s*[–-]\s*([a-z]+)\s+(\d{4})/);
+  if(range) return new Date(parseInt(range[2]), MONTH_MAP[range[1].slice(0,3)]||0, 28);
+  // Handle "dec 2026 – jan 2027" — use end
+  const crossYear = s.match(/[a-z]+\s+\d{4}\s*[–-]\s*([a-z]+)\s+(\d{4})/);
+  if(crossYear) return new Date(parseInt(crossYear[2]), MONTH_MAP[crossYear[1].slice(0,3)]||0, 28);
+  return null;
+}
+
+function getDeadlineClass(dl) {
+  const date = parseDeadlineDate(dl);
+  if(!date) return 'dl-later';
+  const now = new Date();
+  const diffDays = (date - now) / (1000 * 60 * 60 * 24);
+  if(diffDays < -14) return 'dl-overdue'; // more than 2 weeks past = glowing red
+  if(diffDays <= 60) return 'dl-now';     // due within 2 months = urgent red
+  if(diffDays <= 180) return 'dl-soon';   // due within 6 months = amber
+  return 'dl-later';                      // more than 6 months out = neutral
+}
+
+
+/* ══ SUMMARY TAB ══ */
+function renderSummary(){
+  const wrap=document.getElementById('summary-wrap');
+  if(!wrap)return;
+
+  // Gather all tasks with their tab info
+  const urgent=[], soon=[], overdue=[];
+  const tabMeta={planning:'Foundation',attire:'Attire & Décor',guests:'Guests & Invitations',ceremony:'Ceremony & Reception'};
+
+  Object.entries(TABS).forEach(([tabId,cfg])=>{
+    const label=tabMeta[tabId]||tabId;
+    cfg.categories.forEach(cat=>{
+      const extra=gs('clExtra_'+cat.id,[]);
+      const tasks=[...(cat.tasks||[]),...extra].filter(t=>!getTask(t.id).deleted);
+      tasks.forEach(t=>{
+        const ts=getTask(t.id);
+        if(ts.done)return; // skip completed
+        const cls=getDeadlineClass(t.dl);
+        const item={id:t.id,label:t.l,dl:t.dl||'',tab:tabId,tabLabel:label,catId:cat.id,cls};
+        if(cls==='dl-overdue')overdue.push(item);
+        else if(cls==='dl-now')urgent.push(item);
+        else if(cls==='dl-soon')soon.push(item);
+      });
+    });
+  });
+  // Day-of tasks
+  const doExtra=gs('clExtra_'+DAYOF_CAT.id,[]);
+  [...DAYOF_CAT.tasks,...doExtra].filter(t=>!getTask(t.id).deleted).forEach(t=>{
+    const ts=getTask(t.id);
+    if(ts.done)return;
+    const cls=getDeadlineClass(t.dl);
+    const item={id:t.id,label:t.l,dl:t.dl||'',tab:'dayof',tabLabel:'Day Of',catId:DAYOF_CAT.id,cls,isDayOf:true};
+    if(cls==='dl-overdue')overdue.push(item);
+    else if(cls==='dl-now')urgent.push(item);
+    else if(cls==='dl-soon')soon.push(item);
+  });
+
+  if(!overdue.length&&!urgent.length&&!soon.length){
+    wrap.innerHTML='<div class="summary-empty">You're all caught up! No urgent tasks right now ✦</div>';
+    return;
+  }
+
+  function renderGroup(items,title){
+    if(!items.length)return'';
+    return`<div class="summary-section">
+      <div class="summary-section-title">${title} (${items.length})</div>
+      ${items.map(item=>{
+        const ts=getTask(item.id);
+        return`<div class="summary-task-row ${item.cls}">
+          <input type="checkbox" class="summary-task-cb" ${ts.done?'checked':''} 
+            onchange="toggleSummaryTask('${item.id}','${item.tab}','${item.catId}',${!!item.isDayOf})" />
+          <div style="flex:1;min-width:0;">
+            <div class="summary-task-text${ts.done?' done':''}" 
+              onclick="jumpToTask('${item.tab}','${item.id}','${item.catId}',${!!item.isDayOf})"
+            >${item.label}</div>
+          </div>
+          <span class="summary-tab-label">${item.tabLabel}</span>
+          ${item.dl?`<span class="summary-dl-badge">${item.dl}</span>`:''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  wrap.innerHTML=
+    renderGroup(overdue,'⚠ Overdue')+
+    renderGroup(urgent,'🔴 Do now')+
+    renderGroup(soon,'🟡 Coming up');
+}
+
+function toggleSummaryTask(taskId,tab,catId,isDayOf){
+  if(isDayOf){setTask(taskId,{done:!getTask(taskId).done});renderDayOfChecklist();}
+  else{toggleTask(taskId,tab);}
+  renderSummary();
+}
+
 /* ══ GLOBAL SEARCH ══ */
 const ALL_TABS_META = [
   {tab:'planning', label:'Planning'},
@@ -2149,6 +2327,7 @@ function initApp(){
   renderSupplies();
   renderBudget();
   renderNotes();
+  renderSummary();
 }
 initFirebase();
 </script>
