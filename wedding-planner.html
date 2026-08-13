@@ -442,6 +442,19 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
 .summary-empty{text-align:center;padding:2.5rem;color:var(--muted);font-style:italic;font-size:.88rem;}
 </style>
 
+
+<div id="login-screen" style="display:none;position:fixed;inset:0;background:var(--green);z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem;">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-style:italic;font-weight:300;color:var(--cream);text-align:center;line-height:1.1;">Sharon <span style="color:rgba(250,247,242,.7)">&</span> Steven</div>
+  <div style="font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(250,247,242,.5);">Wedding Planner</div>
+  <div style="width:40px;height:1px;background:rgba(250,247,242,.2);"></div>
+  <button id="google-signin-btn" onclick="signInWithGoogle()" style="display:flex;align-items:center;gap:.75rem;background:var(--white);border:none;border-radius:6px;padding:.75rem 1.4rem;font-family:'Jost',sans-serif;font-size:.88rem;font-weight:400;color:var(--ink);cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.2);transition:opacity .15s;">
+    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+    Sign in with Google
+  </button>
+  <div id="login-error" style="font-size:.75rem;color:rgba(250,247,242,.6);font-style:italic;min-height:1.2em;text-align:center;"></div>
+  <div style="font-size:.7rem;color:rgba(250,247,242,.3);margin-top:1rem;">Access restricted to invited collaborators only.</div>
+</div>
+
 <header>
   <h1>Sharon <span>&</span> Steven</h1>
   <p class="header-sub">Wedding Planner</p>
@@ -672,86 +685,103 @@ function rerenderAll(){
 
 function initFirebase(){
   showSyncStatus('connecting');
-  // Show loading screen while Firebase connects
   document.getElementById('loading-screen').style.display='flex';
 
-  // Fallback: if Firebase doesn't load in 6 seconds, use localStorage
-  const fallbackTimer=setTimeout(()=>{
-    console.warn('Firebase timeout — falling back to localStorage');
-    S=loadLocal();
-    hideLanding();
-    initApp();
-    showSyncStatus('error');
-  }, 6000);
+  const ALLOWED_EMAILS=['sharonstevenplanning@gmail.com','kittyliao0099@gmail.com','sharoncao19@gmail.com'];
 
-  const script1=document.createElement('script');
-  script1.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
-  script1.onload=()=>{
-    const script2=document.createElement('script');
-    script2.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js';
-    script2.onload=()=>{
-      try{
-        firebase.initializeApp(FIREBASE_CONFIG);
-        db=firebase.database();
-        let firstLoad=true;
-        db.ref('weddingData').on('value', snap=>{
-          const raw=snap.val();
-          if(raw){
-            try{
-              S=JSON.parse(raw);
-              saveLocal(S);
-            }catch(e){
-              console.warn('Firebase parse error:',e);
-              S=loadLocal();
-            }
-          } else {
-            // Nothing in Firebase yet — use localStorage if available
-            S=loadLocal();
-          }
-          showSyncStatus('synced');
-          if(firstLoad){
-            firstLoad=false;
-            clearTimeout(fallbackTimer);
-            hideLanding();
-            initApp();
-          } else {
-            rerenderAll();
-          }
-        }, err=>{
-          console.warn('Firebase read error:',err);
-          clearTimeout(fallbackTimer);
-          S=loadLocal();
-          hideLanding();
-          initApp();
-          showSyncStatus('error');
-        });
-      }catch(e){
-        console.warn('Firebase init error:',e);
-        clearTimeout(fallbackTimer);
-        S=loadLocal();
-        hideLanding();
-        initApp();
-        showSyncStatus('error');
-      }
-    };
-    script2.onerror=()=>{
-      clearTimeout(fallbackTimer);
-      S=loadLocal();
-      hideLanding();
-      initApp();
-      showSyncStatus('error');
-    };
-    document.head.appendChild(script2);
-  };
-  script1.onerror=()=>{
+  const fallbackTimer=setTimeout(()=>{
+    S=loadLocal();
+    document.getElementById('loading-screen').style.display='none';
+    document.getElementById('login-screen').style.display='flex';
+  },8000);
+
+  // Load Firebase scripts
+  function loadScript(src,cb,err){
+    const s=document.createElement('script');
+    s.src=src;s.onload=cb;s.onerror=err;
+    document.head.appendChild(s);
+  }
+
+  function fallback(){
     clearTimeout(fallbackTimer);
     S=loadLocal();
     hideLanding();
     initApp();
     showSyncStatus('error');
-  };
-  document.head.appendChild(script1);
+  }
+
+  function showLoginScreen(msg){
+    clearTimeout(fallbackTimer);
+    document.getElementById('loading-screen').style.display='none';
+    document.getElementById('login-screen').style.display='flex';
+    const el=document.getElementById('login-error');
+    if(el)el.textContent=msg||'';
+  }
+
+  function signInWithGoogle(){
+    const provider=new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).catch(()=>{
+      const el=document.getElementById('login-error');
+      if(el)el.textContent='Sign-in failed. Please try again.';
+    });
+  }
+  window.signInWithGoogle=signInWithGoogle;
+
+  function startListening(){
+    let firstLoad=true;
+    db.ref('weddingData').on('value',snap=>{
+      const raw=snap.val();
+      if(raw){try{S=JSON.parse(raw);saveLocal(S);}catch(e){S=loadLocal();}}
+      else{S=loadLocal();}
+      showSyncStatus('synced');
+      if(firstLoad){
+        firstLoad=false;
+        clearTimeout(fallbackTimer);
+        hideLanding();
+        initApp();
+      } else {
+        rerenderAll();
+      }
+    },err=>{
+      console.warn('Firebase read error:',err);
+      fallback();
+    });
+  }
+
+  loadScript(
+    'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+    ()=>loadScript(
+      'https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js',
+      ()=>loadScript(
+        'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+        ()=>{
+          try{
+            firebase.initializeApp(FIREBASE_CONFIG);
+            db=firebase.database();
+            const auth=firebase.auth();
+            auth.onAuthStateChanged(user=>{
+              if(!user){showLoginScreen('');return;}
+              if(!ALLOWED_EMAILS.includes(user.email)){
+                auth.signOut();
+                showLoginScreen("That Google account doesn't have access. Please sign in with an approved email.");
+                return;
+              }
+              document.getElementById('login-screen').style.display='none';
+              startListening();
+            });
+          }catch(e){
+            console.warn('Firebase init error:',e);
+            fallback();
+          }
+        },
+        fallback
+      ),
+      fallback
+    ),
+    fallback
+  );
 }
+
 
 function hideLanding(){
   document.getElementById('loading-screen').style.display='none';
@@ -760,8 +790,14 @@ function hideLanding(){
 /* ══ HEADER ══ */
 const dateInput=document.getElementById('wedding-date');
 const guestInput=document.getElementById('guest-count');
-dateInput.value=gs('weddingDate','');
-guestInput.value=gs('guestCount','');
+
+function restoreHeaderFields(){
+  dateInput.value=gs('weddingDate','');
+  guestInput.value=gs('guestCount','');
+  const venueInput=document.getElementById('venue-name');
+  if(venueInput)venueInput.value=gs('venueName','');
+  updateCountdown();
+}
 function updateCountdown(){
   const d=dateInput.value,el=document.getElementById('countdown-display');
   if(!d){el.textContent='';return;}
@@ -772,7 +808,6 @@ dateInput.addEventListener('change',()=>{ss('weddingDate',dateInput.value);updat
 guestInput.addEventListener('input',()=>ss('guestCount',guestInput.value));
 const venueInput=document.getElementById('venue-name');
 if(venueInput){
-  venueInput.value=gs('venueName','');
   venueInput.addEventListener('input',()=>ss('venueName',venueInput.value));
 }
 updateCountdown();
@@ -2365,6 +2400,7 @@ document.addEventListener('click', e=>{
 
 /* ══ INIT ══ */
 function initApp(){
+  restoreHeaderFields();
   ['planning','attire','guests','ceremony'].forEach(renderTab);
   renderParty();
   renderDayOfChecklist();
