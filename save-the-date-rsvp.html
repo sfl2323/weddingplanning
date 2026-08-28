@@ -195,6 +195,10 @@
     opacity:1;
     pointer-events:auto;
   }
+  .deck-wrap:not(.visible),
+  .deck-wrap:not(.visible) *{
+    pointer-events:none !important;
+  }
   .deck{
     position:relative;
     width:84%;
@@ -615,7 +619,9 @@
     alert('RSVP link goes here — swap this for your RSVP form URL.');
   });
 
-  layout();
+  // Build initial dot/arrow state without making the (still-hidden) deck clickable.
+  dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+  prevArrow.classList.add('disabled');
 })();
 </script>
 </body>
