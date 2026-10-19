@@ -65,7 +65,37 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .search-bar:focus{outline:none;border-color:var(--green);}
 
 /* DEADLINE BADGE */
-.deadline-badge{display:inline-block;font-size:.64rem;padding:1px 7px;border-radius:99px;margin-left:.45rem;vertical-align:middle;letter-spacing:.03em;border:1px solid var(--border);background:var(--warm);color:var(--muted);}
+.deadline-badge{display:inline-block;font-size:.64rem;padding:1px 7px;border-radius:99px;margin-left:.45rem;vertical-align:middle;letter-spacing:.03em;border:1px solid var(--border);background:var(--warm);color:var(--muted);cursor:pointer;transition:border-color .15s,background .15s;}
+.deadline-badge:hover{border-color:var(--green);background:#edf3ef;color:var(--green-dk);}
+.deadline-badge::after{content:' ✎';font-size:.55rem;opacity:.45;}
+.deadline-edit-input{font-family:'Jost',sans-serif;font-size:.64rem;padding:1px 6px;border:1px solid var(--green);border-radius:99px;background:#fff;color:var(--ink);outline:none;width:120px;margin-left:.45rem;vertical-align:middle;}
+.add-task-row{display:flex;align-items:center;gap:.5rem;margin:.4rem .5rem .2rem;}
+.add-task-input{flex:1;font-family:'Jost',sans-serif;font-size:.83rem;border:1px dashed var(--border);border-radius:6px;padding:.28rem .6rem;background:transparent;color:var(--ink);outline:none;}
+.add-task-input:focus{border-color:var(--green);background:#fff;}
+.add-task-dl-input{font-family:'Jost',sans-serif;font-size:.64rem;padding:1px 6px;border:1px dashed var(--border);border-radius:99px;background:transparent;color:var(--muted);outline:none;width:100px;}
+.add-task-dl-input:focus{border-color:var(--green);}
+.add-task-btn{font-size:.72rem;padding:.22rem .65rem;border-radius:99px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;white-space:nowrap;}
+.add-task-btn:hover{opacity:.85;}
+.task-edit-btn{opacity:0;font-size:.78rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .2rem;line-height:1;transition:opacity .12s,color .12s;flex-shrink:0;}
+.task-row:hover .task-edit-btn{opacity:1;}
+.task-edit-btn:hover{color:var(--green);}
+.task-del-btn{opacity:0;font-size:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .3rem;line-height:1;transition:opacity .12s,color .12s;flex-shrink:0;}
+.task-row:hover .task-del-btn{opacity:1;}
+.task-del-btn:hover{color:#c0392b;}
+.task-label-input{font-family:'Jost',sans-serif;font-size:.83rem;border:none;border-bottom:1.5px solid var(--green);background:transparent;color:var(--ink);outline:none;width:100%;padding:0;}
+.deadline-badge:hover{border-color:var(--green);background:#edf3ef;color:var(--green-dk);}
+.deadline-badge::after{content:' ✎';font-size:.55rem;opacity:.4;}
+.deadline-edit-input{font-family:'Jost',sans-serif;font-size:.64rem;padding:1px 6px;border:1px solid var(--green);border-radius:99px;background:#fff;color:var(--ink);outline:none;width:120px;margin-left:.45rem;vertical-align:middle;}
+.add-task-row{display:flex;align-items:center;gap:.5rem;margin-top:.5rem;padding:.35rem .5rem;}
+.add-task-input{flex:1;font-family:'Jost',sans-serif;font-size:.83rem;border:1px dashed var(--border);border-radius:6px;padding:.3rem .6rem;background:transparent;color:var(--ink);outline:none;}
+.add-task-input:focus{border-color:var(--green);background:#fff;}
+.add-task-dl-input{font-family:'Jost',sans-serif;font-size:.64rem;padding:1px 6px;border:1px dashed var(--border);border-radius:99px;background:transparent;color:var(--muted);outline:none;width:100px;}
+.add-task-dl-input:focus{border-color:var(--green);}
+.add-task-btn{font-size:.75rem;padding:.25rem .7rem;border-radius:99px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;white-space:nowrap;}
+.add-task-btn:hover{opacity:.85;}
+.task-del-btn{opacity:0;font-size:.8rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .25rem;line-height:1;transition:opacity .15s,color .15s;flex-shrink:0;}
+.task-row:hover .task-del-btn{opacity:1;}
+.task-del-btn:hover{color:#c0392b;}
 
 /* CATEGORY CARDS */
 .cat-card{background:var(--white);border:1px solid var(--border);border-radius:8px;margin-bottom:.85rem;overflow:hidden;}
@@ -1169,9 +1199,11 @@ const TABS={
     progFill:'gu-prog-fill',progLabel:'gu-prog-label',search:'gu-search',wrap:'gu-wrap',
     categories:[
       {id:'guestlist',name:'Guest list',color:'#3d6b52',tasks:[
-        {id:'g-list',     l:'Finalize guest list with full names and addresses', dl:'Aug – Nov 2026'},
-        {id:'g-website',  l:'Create your wedding website',                    dl:'Oct – Dec 2026'},
-        {id:'g-hotels',   l:'Arrange hotel room blocks for out-of-town guests', dl:'Oct – Dec 2026'},
+        {id:'g-list',    l:'Finalize guest list with full names and addresses',                       dl:'Aug – Nov 2026'},
+        {id:'g-emails',  l:'Collect email / phone for all 250 guests for digital save-the-date',     dl:'Aug – Oct 2026'},
+        {id:'g-tiers',   l:'Divide guest list into 3 tiers: tea ceremony / ceremony+reception / reception only', dl:'Aug – Oct 2026'},
+        {id:'g-website', l:'Create wedding website with RSVP form',                                  dl:'Oct – Dec 2026'},
+        {id:'g-hotels',  l:'Arrange hotel room blocks for out-of-town guests',                       dl:'Oct – Dec 2026'},
       ]},
       {id:'savethedates',name:'Save-the-dates',color:'#D4537E',tasks:[
         {id:'g-std-design',l:'Design digital save-the-date',                 dl:'Sep – Oct 2026'},
@@ -1297,7 +1329,12 @@ function renderCatHTML(cat,tab,f,search){
         html+=`<div class="task-row${ts.done?' done':''} ${dlClass2}">
           <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
           <div class="task-content">
-            <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">${t.l}<span class="deadline-badge">${t.dl||''}</span></div>
+            <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">
+              <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
+              <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
+            </div>
+          <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
+          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${tab}')" title="Delete task">✕</button>
             <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
             ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
           </div>
@@ -1335,11 +1372,16 @@ function renderCatHTML(cat,tab,f,search){
   if(isOpen){
     tasks.forEach(t=>{
       const ts=getTask(t.id);
-      const dlClass=ts.done?'':getDeadlineClass(t.dl);
+      const dlClass=ts.done?'':getDeadlineClass(ts.dl_override!==undefined?ts.dl_override:(t.dl||''));
       html+=`<div class="task-row${ts.done?' done':''} ${dlClass}">
         <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
         <div class="task-content">
-          <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">${t.l}<span class="deadline-badge">${t.dl||''}</span></div>
+          <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">
+              <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
+              <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
+            </div>
+          <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
+          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${tab}')" title="Delete task">✕</button>
           <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
           ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
         </div>
@@ -2300,6 +2342,108 @@ function toggleSummaryTask(taskId,tab,catId,isDayOf){
   if(isDayOf){setTask(taskId,{done:!getTask(taskId).done});renderDayOfChecklist();}
   else{toggleTask(taskId,tab);}
   renderSummary();
+}
+
+
+/* ── EDITABLE TASK LABEL ── */
+function editTaskLabel(labelEl, taskId, tab){
+  if(!labelEl)return;
+  const current = labelEl.textContent.trim();
+  const input = document.createElement('input');
+  input.type='text'; input.value=current; input.className='task-label-input';
+  input.onclick=e=>e.stopPropagation();
+  const save=()=>{
+    const val=input.value.trim()||current;
+    setTask(taskId,{label_override:val});
+    labelEl.textContent=val;
+    input.replaceWith(labelEl);
+    renderSummary();
+  };
+  input.onblur=save;
+  input.onkeydown=e=>{
+    if(e.key==='Enter')input.blur();
+    if(e.key==='Escape'){input.onblur=null;input.replaceWith(labelEl);}
+    e.stopPropagation();
+  };
+  labelEl.replaceWith(input);
+  input.focus(); input.select();
+}
+
+/* ── EDITABLE DEADLINES ── */
+function editDeadline(span, taskId, tab){
+  const current = span.textContent.replace(' ✎','').trim();
+  const input = document.createElement('input');
+  input.type='text'; input.value=current; input.className='deadline-edit-input';
+  input.onclick=e=>e.stopPropagation();
+  const save=()=>{
+    const val=input.value.trim();
+    setTask(taskId,{dl_override:val});
+    input.replaceWith(span);
+    span.textContent=val;
+    renderTab(tab);
+    renderSummary();
+  };
+  input.onblur=save;
+  input.onkeydown=e=>{
+    if(e.key==='Enter')input.blur();
+    if(e.key==='Escape'){input.value=current;input.onblur=null;input.replaceWith(span);} 
+    e.stopPropagation();
+  };
+  span.replaceWith(input);
+  input.focus(); input.select();
+}
+
+/* ── ADD CUSTOM TASK ── */
+function addCustomTask(tab, catId){
+  const inp=document.getElementById('add-inp-'+catId);
+  const dlInp=document.getElementById('add-dl-'+catId);
+  if(!inp||!inp.value.trim())return;
+  const label=inp.value.trim();
+  const dl=dlInp?dlInp.value.trim():'';
+  const newId='custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+  const extra=gs('clExtra_'+catId,[]);
+  extra.push({id:newId,tab,catId,l:label,dl});
+  ss('clExtra_'+catId,extra);
+  inp.value=''; if(dlInp)dlInp.value='';
+  saveData();
+  renderTab(tab);
+  renderSummary();
+}
+
+/* ── DELETE TASK ── */
+function deleteTask(taskId, tab){
+  // Mark as deleted in task state (works for both built-in and custom tasks)
+  setTask(taskId,{deleted:true});
+  // If it's a custom task, remove from clExtra_ too
+  // Find which catId it belongs to (search all clExtra_ keys)
+  for(const key of Object.keys(localStorage)){
+    if(key.startsWith('clExtra_')){
+      const arr=gs(key.replace('clExtra_','').length?key.replace(window.location.pathname,''):'x',[]);
+      // simpler: just use the stored key
+    }
+  }
+  // Scan all categories to find and remove from clExtra
+  const allCatIds=getAllCatIds();
+  for(const cid of allCatIds){
+    const extra=gs('clExtra_'+cid,[]);
+    const filtered=extra.filter(t=>t.id!==taskId);
+    if(filtered.length!==extra.length){ss('clExtra_'+cid,filtered);break;}
+  }
+  saveData();
+  renderTab(tab);
+  renderSummary();
+}
+
+function getAllCatIds(){
+  const ids=[];
+  const tabs=['foundation','attire','guests','ceremony','dayof','supplies','notes'];
+  for(const t of tabs){
+    const cfg=TAB_CONFIGS[t];
+    if(cfg&&cfg.categories)cfg.categories.forEach(c=>ids.push(c.id));
+  }
+  // Also day-of checklist
+  if(typeof DAYOF_CAT!=='undefined')ids.push(DAYOF_CAT.id);
+  return ids;
 }
 
 /* ══ GLOBAL SEARCH ══ */
