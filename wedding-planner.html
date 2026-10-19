@@ -503,6 +503,7 @@ footer{text-align:center;padding:1.3rem;font-size:.7rem;color:var(--muted);borde
     <div class="global-search-dropdown" id="search-dropdown"></div>
   </div>
   <div id="sync-status" style="font-size:.7rem;margin-top:.3rem;color:rgba(250,247,242,.5);font-style:italic;">Saved locally</div>
+  <div style="margin-top:.4rem;"><button onclick="restoreAllTasks()" style="font-size:.65rem;background:rgba(255,255,255,.15);color:rgba(250,247,242,.7);border:1px solid rgba(255,255,255,.25);border-radius:4px;padding:2px 10px;cursor:pointer;font-family:'Jost',sans-serif;">↩ Restore hidden tasks</button></div>
 </header>
 
 <nav>
@@ -761,7 +762,7 @@ function initFirebase(){
     let firstLoad=true;
     db.ref('weddingData').on('value',snap=>{
       const raw=snap.val();
-      if(raw){try{S=JSON.parse(raw);saveLocal(S);}catch(e){S=loadLocal();}}
+      if(raw){try{const parsed=JSON.parse(raw);if(parsed&&Object.keys(parsed).length>2){S=parsed;saveLocal(S);}else{S=loadLocal();}}catch(e){S=loadLocal();}}
       else{S=loadLocal();}
       showSyncStatus('synced');
       if(firstLoad){
@@ -1334,11 +1335,10 @@ function renderCatHTML(cat,tab,f,search){
               <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
             </div>
           <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
-          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${tab}')" title="Delete task">✕</button>
+          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
             <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
             ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
           </div>
-          <button class="task-delete-btn" onclick="deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
         </div>`;
       });
       html+=`<div class="add-task-row">
@@ -1381,11 +1381,10 @@ function renderCatHTML(cat,tab,f,search){
               <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
             </div>
           <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
-          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${tab}')" title="Delete task">✕</button>
+          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
           <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
           ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
         </div>
-        <button class="task-delete-btn" onclick="deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
       </div>`;
     });
     html+=`<div class="add-task-row">
@@ -2411,27 +2410,15 @@ function addCustomTask(tab, catId){
 }
 
 /* ── DELETE TASK ── */
-function deleteTask(taskId, tab){
-  // Mark as deleted in task state (works for both built-in and custom tasks)
-  setTask(taskId,{deleted:true});
-  // If it's a custom task, remove from clExtra_ too
-  // Find which catId it belongs to (search all clExtra_ keys)
-  for(const key of Object.keys(localStorage)){
-    if(key.startsWith('clExtra_')){
-      const arr=gs(key.replace('clExtra_','').length?key.replace(window.location.pathname,''):'x',[]);
-      // simpler: just use the stored key
-    }
-  }
-  // Scan all categories to find and remove from clExtra
-  const allCatIds=getAllCatIds();
-  for(const cid of allCatIds){
-    const extra=gs('clExtra_'+cid,[]);
-    const filtered=extra.filter(t=>t.id!==taskId);
-    if(filtered.length!==extra.length){ss('clExtra_'+cid,filtered);break;}
-  }
+function restoreAllTasks(){
+  // Clear deleted flag on all tasks in S
+  Object.keys(S).forEach(k=>{
+    if(k.startsWith('cl_')&&S[k].deleted){delete S[k].deleted;}
+  });
   saveData();
-  renderTab(tab);
+  ['planning','attire','guests','ceremony'].forEach(renderTab);
   renderSummary();
+  alert('All hidden tasks restored!');
 }
 
 function getAllCatIds(){
