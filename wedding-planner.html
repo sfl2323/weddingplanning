@@ -76,10 +76,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .add-task-dl-input:focus{border-color:var(--green);}
 .add-task-btn{font-size:.72rem;padding:.22rem .65rem;border-radius:99px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;white-space:nowrap;}
 .add-task-btn:hover{opacity:.85;}
-.task-edit-btn{opacity:0;font-size:.78rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .2rem;line-height:1;transition:opacity .12s,color .12s;flex-shrink:0;}
+.task-edit-btn{opacity:0;font-size:.72rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:1px 3px;line-height:1;transition:opacity .12s,color .12s;position:absolute;top:5px;right:22px;}
 .task-row:hover .task-edit-btn{opacity:1;}
 .task-edit-btn:hover{color:var(--green);}
-.task-del-btn{opacity:0;font-size:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .3rem;line-height:1;transition:opacity .12s,color .12s;flex-shrink:0;}
+.task-del-btn{opacity:0;font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:1px 3px;line-height:1;transition:opacity .12s,color .12s;position:absolute;top:5px;right:4px;}
 .task-row:hover .task-del-btn{opacity:1;}
 .task-del-btn:hover{color:#c0392b;}
 .task-label-input{font-family:'Jost',sans-serif;font-size:.83rem;border:none;border-bottom:1.5px solid var(--green);background:transparent;color:var(--ink);outline:none;width:100%;padding:0;}
@@ -93,7 +93,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .add-task-dl-input:focus{border-color:var(--green);}
 .add-task-btn{font-size:.75rem;padding:.25rem .7rem;border-radius:99px;border:1px solid var(--green);background:var(--green);color:#fff;cursor:pointer;white-space:nowrap;}
 .add-task-btn:hover{opacity:.85;}
-.task-del-btn{opacity:0;font-size:.8rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0 .25rem;line-height:1;transition:opacity .15s,color .15s;flex-shrink:0;}
+.task-del-btn{opacity:0;font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:1px 3px;line-height:1;transition:opacity .15s,color .15s;position:absolute;top:5px;right:4px;}
 .task-row:hover .task-del-btn{opacity:1;}
 .task-del-btn:hover{color:#c0392b;}
 
@@ -110,7 +110,7 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .cat-chevron.open{transform:rotate(180deg);}
 
 /* TASK ROWS */
-.task-row{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem 1rem;border-bottom:1px solid var(--border);transition:background .1s;}
+.task-row{display:flex;align-items:flex-start;gap:.65rem;padding:.65rem 1rem;border-bottom:1px solid var(--border);transition:background .1s;position:relative;}
 .task-row:last-of-type{border-bottom:none;}
 .task-row:hover{background:var(--cream);}
 .task-row.done .task-text{text-decoration:line-through;color:var(--muted);}
@@ -1331,13 +1331,13 @@ function renderCatHTML(cat,tab,f,search){
         const dlClass2=ts.done?'':getDeadlineClass(t.dl);
         html+=`<div class="task-row${ts.done?' done':''} ${dlClass2}">
           <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
+          <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
+          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
           <div class="task-content">
             <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">
               <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
               <span class="deadline-badge ${dlClass2}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
             </div>
-          <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
-          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
             <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
             ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
           </div>
@@ -1381,13 +1381,13 @@ function renderCatHTML(cat,tab,f,search){
       const dlClass=ts.done?'':getDeadlineClass(ts.dl_override!==undefined?ts.dl_override:(t.dl||''));
       html+=`<div class="task-row${ts.done?' done':''} ${dlClass}">
         <input type="checkbox" class="task-cb" ${ts.done?'checked':''} onchange="toggleTask('${t.id}','${tab}')" aria-label="${t.l}">
+        <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
+        <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
         <div class="task-content">
           <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">
-              <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
-              <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
-            </div>
-          <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
-          <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
+            <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
+            <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
+          </div>
           <button class="note-toggle" onclick="toggleNote('${t.id}','${tab}')">${ts.noteOpen?'hide note':(ts.note?'✏ edit note':'+ add note')}</button>
           ${ts.noteOpen?`<textarea class="task-note" placeholder="Notes, vendor info, links…" oninput="saveNote('${t.id}',this.value)">${ts.note||''}</textarea>`:''}
         </div>
