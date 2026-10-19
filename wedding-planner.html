@@ -1285,6 +1285,8 @@ const DAYOF_CAT={
 };
 
 /* ══ CHECKLIST RENDER ══ */
+const DL_MONTHS=['Nov 2026','Dec 2026','Jan 2027','Feb 2027','Mar 2027','Apr 2027','May 2027','Jun 2027','Jul 2027','Aug 2027','Sep 2027','Oct 2027','Nov 2027','Dec 2027'];
+const DL_MONTH_OPTIONS='<option value="">— month —</option>'+DL_MONTHS.map(m=>`<option value="${m}">${m}</option>`).join('');
 let filters={planning:'all',attire:'all',guests:'all',ceremony:'all'};
 let collapsed=gs('collapsed',{});
 function getTask(id){return S['cl_'+id]||{done:false,note:'',noteOpen:false};}
@@ -1332,7 +1334,7 @@ function renderCatHTML(cat,tab,f,search){
           <div class="task-content">
             <div class="task-text" onclick="toggleTask('${t.id}','${tab}')">
               <span class="task-label" id="lbl-${t.id}" ondblclick="event.stopPropagation();editTaskLabel(this,'${t.id}','${tab}')">${t._custom?ts.label_override||t.l:(ts.label_override||t.l)}</span>
-              <span class="deadline-badge ${dlClass}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
+              <span class="deadline-badge ${dlClass2}" onclick="event.stopPropagation();editDeadline(this,'${t.id}','${tab}')" title="Click to edit deadline">${ts.dl_override!==undefined?ts.dl_override:(t.dl||'')}</span>
             </div>
           <button class="task-edit-btn" onclick="event.stopPropagation();editTaskLabel(document.getElementById('lbl-${t.id}'),'${t.id}','${tab}')" title="Edit task name">✎</button>
           <button class="task-del-btn" onclick="event.stopPropagation();deleteTask('${t.id}','${cat.id}','${tab}')" title="Delete task">✕</button>
@@ -1341,8 +1343,12 @@ function renderCatHTML(cat,tab,f,search){
           </div>
         </div>`;
       });
-      html+=`<div class="add-task-row">
-        <input type="text" placeholder="Add a custom task…" id="cl-add-${cat.id}" onkeydown="if(event.key==='Enter')addClTask('${cat.id}','${tab}')">
+      html+=`<div class="add-task-row" style="flex-wrap:wrap;">
+        <input type="text" placeholder="Add a custom task…" id="cl-add-${cat.id}" style="flex:1;min-width:140px;" onkeydown="if(event.key==='Enter')addClTask('${cat.id}','${tab}')">
+        <input type="date" id="cl-date-${cat.id}" class="add-task-dl-input" style="width:130px;" oninput="if(this.value){document.getElementById('cl-dl-${cat.id}').value='';document.getElementById('cl-dl2-${cat.id}').value='';}">
+        <select id="cl-dl-${cat.id}" class="add-task-dl-input" onchange="if(this.value)document.getElementById('cl-date-${cat.id}').value=''">${DL_MONTH_OPTIONS}</select>
+        <span style="font-size:.65rem;color:var(--muted);">to</span>
+        <select id="cl-dl2-${cat.id}" class="add-task-dl-input" onchange="if(this.value)document.getElementById('cl-date-${cat.id}').value=''">${DL_MONTH_OPTIONS}</select>
         <button class="btn-small" onclick="addClTask('${cat.id}','${tab}')">+ Add</button>
       </div>`;
     }
@@ -1387,8 +1393,12 @@ function renderCatHTML(cat,tab,f,search){
         </div>
       </div>`;
     });
-    html+=`<div class="add-task-row">
-      <input type="text" placeholder="Add a custom task…" id="cl-add-${cat.id}" onkeydown="if(event.key==='Enter')addClTask('${cat.id}','${tab}')">
+    html+=`<div class="add-task-row" style="flex-wrap:wrap;">
+      <input type="text" placeholder="Add a custom task…" id="cl-add-${cat.id}" style="flex:1;min-width:140px;" onkeydown="if(event.key==='Enter')addClTask('${cat.id}','${tab}')">
+      <input type="date" id="cl-date-${cat.id}" class="add-task-dl-input" style="width:130px;" oninput="if(this.value){document.getElementById('cl-dl-${cat.id}').value='';document.getElementById('cl-dl2-${cat.id}').value='';}">
+      <select id="cl-dl-${cat.id}" class="add-task-dl-input" onchange="if(this.value)document.getElementById('cl-date-${cat.id}').value=''">${DL_MONTH_OPTIONS}</select>
+      <span style="font-size:.65rem;color:var(--muted);">to</span>
+      <select id="cl-dl2-${cat.id}" class="add-task-dl-input" onchange="if(this.value)document.getElementById('cl-date-${cat.id}').value=''">${DL_MONTH_OPTIONS}</select>
       <button class="btn-small" onclick="addClTask('${cat.id}','${tab}')">+ Add</button>
     </div>`;
   }
@@ -1479,9 +1489,25 @@ function saveNote(id,val){setTask(id,{note:val});}
 function addClTask(catId,tab){
   const inp=document.getElementById('cl-add-'+catId);
   if(!inp||!inp.value.trim())return;
+  const dateInp=document.getElementById('cl-date-'+catId);
+  const dlSel=document.getElementById('cl-dl-'+catId);
+  const dlSel2=document.getElementById('cl-dl2-'+catId);
+  let dl='';
+  if(dateInp&&dateInp.value){
+    const [y,mo,d]=dateInp.value.split('-');
+    dl=`${parseInt(mo)}/${parseInt(d)}/${y}`;
+  } else {
+    const f=dlSel?dlSel.value:'', t=dlSel2?dlSel2.value:'';
+    if(f&&t&&f!==t) dl=f+' – '+t;
+    else if(f) dl=f;
+  }
   const extras=gs('clExtra_'+catId,[]);
-  extras.push({id:'ex_'+Date.now(),l:inp.value.trim(),dl:'Custom'});
-  ss('clExtra_'+catId,extras);inp.value='';renderTab(tab);
+  extras.push({id:'ex_'+Date.now(),l:inp.value.trim(),dl:dl});
+  ss('clExtra_'+catId,extras);
+  inp.value='';
+  if(dateInp)dateInp.value='';
+  if(dlSel)dlSel.value='';if(dlSel2)dlSel2.value='';
+  renderTab(tab);
 }
 function toggleCatDO(){collapsed[DAYOF_CAT.id]=!collapsed[DAYOF_CAT.id];ss('collapsed',collapsed);renderDayOfChecklist();}
 function toggleTaskDO(id){setTask(id,{done:!getTask(id).done});renderDayOfChecklist();}
@@ -2371,25 +2397,91 @@ function editTaskLabel(labelEl, taskId, tab){
 /* ── EDITABLE DEADLINES ── */
 function editDeadline(span, taskId, tab){
   const current = span.textContent.replace(' ✎','').trim();
-  const input = document.createElement('input');
-  input.type='text'; input.value=current; input.className='deadline-edit-input';
-  input.onclick=e=>e.stopPropagation();
-  const save=()=>{
-    const val=input.value.trim();
+  // Parse existing value into date / from month / to month
+  let dateVal='', fromVal='', toVal='';
+  const rangeParts = current.split(/\s*[–-]\s*/);
+  if(rangeParts.length>=2){fromVal=rangeParts[0].trim();toVal=rangeParts[1].trim();}
+  else if(current && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(current)){dateVal=current;}
+  else if(current&&current!=='— no date —'){fromVal=current;toVal=current;}
+
+  // Build popup
+  const popup=document.createElement('div');
+  popup.onclick=e=>e.stopPropagation();
+  popup.style.cssText='position:absolute;z-index:999;background:#fff;border:1px solid var(--green);border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.15);display:flex;flex-direction:column;gap:6px;min-width:220px;';
+
+  const inputStyle='font-family:inherit;font-size:.78rem;border:1px solid var(--border);border-radius:4px;padding:3px 7px;color:var(--ink);outline:none;width:100%;box-sizing:border-box;';
+  inputStyle; // reference to avoid lint
+  const selStyle='font-family:inherit;font-size:.76rem;border:1px solid var(--border);border-radius:4px;padding:3px 5px;color:var(--ink);outline:none;flex:1;background:#fff;';
+
+  // Section label helper
+  const lbl=(txt)=>{const s=document.createElement('div');s.textContent=txt;s.style.cssText='font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;';return s;};
+
+  // Specific date row
+  popup.appendChild(lbl('Specific date'));
+  const dateInp=document.createElement('input');
+  dateInp.type='date'; dateInp.style.cssText=inputStyle+'width:100%;box-sizing:border-box;';
+  if(dateVal){const p=dateVal.split('/');dateInp.value=`${p[2]}-${p[0].padStart(2,'0')}-${p[1].padStart(2,'0')}`;}
+  popup.appendChild(dateInp);
+
+  // Month range row
+  popup.appendChild(lbl('Month range'));
+  const monthRow=document.createElement('div');
+  monthRow.style.cssText='display:flex;align-items:center;gap:4px;';
+  const mkSel=(cv)=>{const s=document.createElement('select');s.style.cssText=selStyle;s.innerHTML='<option value="">—</option>'+DL_MONTHS.map(m=>`<option value="${m}"${m===cv?' selected':''}>${m}</option>`).join('');return s;};
+  const fromSel=mkSel(fromVal), toSel=mkSel(toVal);
+  const sepSpan=document.createElement('span');sepSpan.textContent='to';sepSpan.style.cssText='font-size:.7rem;color:var(--muted);flex-shrink:0;';
+  monthRow.appendChild(fromSel);monthRow.appendChild(sepSpan);monthRow.appendChild(toSel);
+  popup.appendChild(monthRow);
+
+  // Clear + Save buttons
+  const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;gap:6px;margin-top:2px;';
+  const saveBtn=document.createElement('button');
+  saveBtn.textContent='Save';
+  saveBtn.style.cssText='flex:1;font-family:inherit;font-size:.75rem;background:var(--green);color:#fff;border:none;border-radius:5px;padding:4px 0;cursor:pointer;';
+  const clearBtn=document.createElement('button');
+  clearBtn.textContent='Clear';
+  clearBtn.style.cssText='font-family:inherit;font-size:.75rem;background:var(--cream);color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:4px 8px;cursor:pointer;';
+  btnRow.appendChild(clearBtn);btnRow.appendChild(saveBtn);
+  popup.appendChild(btnRow);
+
+  const close=()=>{popup.remove();};
+
+  const doSave=()=>{
+    let val='';
+    if(dateInp.value){
+      // Convert yyyy-mm-dd to m/d/yyyy
+      const [y,mo,d]=dateInp.value.split('-');
+      val=`${parseInt(mo)}/${parseInt(d)}/${y}`;
+    } else {
+      const f=fromSel.value, t=toSel.value;
+      if(f&&t&&f!==t) val=f+' – '+t;
+      else if(f) val=f;
+    }
     setTask(taskId,{dl_override:val});
-    input.replaceWith(span);
-    span.textContent=val;
+    span.textContent=val||'';
+    close();
     renderTab(tab);
     renderSummary();
   };
-  input.onblur=save;
-  input.onkeydown=e=>{
-    if(e.key==='Enter')input.blur();
-    if(e.key==='Escape'){input.value=current;input.onblur=null;input.replaceWith(span);} 
-    e.stopPropagation();
+
+  saveBtn.onclick=doSave;
+  clearBtn.onclick=()=>{dateInp.value='';fromSel.value='';toSel.value='';};
+
+  // Close on outside click
+  const outsideClick=(e)=>{if(!popup.contains(e.target)&&e.target!==span){close();document.removeEventListener('click',outsideClick,true);}};
+  setTimeout(()=>document.addEventListener('click',outsideClick,true),10);
+
+  // Mutually exclusive: typing a date clears month selects and vice versa
+  dateInp.oninput=()=>{if(dateInp.value){fromSel.value='';toSel.value='';}};
+  fromSel.onchange=toSel.onchange=()=>{if(fromSel.value||toSel.value){dateInp.value='';}
+    const fi=DL_MONTHS.indexOf(fromSel.value),ti=DL_MONTHS.indexOf(toSel.value);
+    if(fromSel.value&&toSel.value&&fi>ti)toSel.value=fromSel.value;
   };
-  span.replaceWith(input);
-  input.focus(); input.select();
+
+  // Position near the span
+  span.style.position='relative';
+  span.replaceWith(popup);
+  dateInp.focus();
 }
 
 /* ── ADD CUSTOM TASK ── */
@@ -2413,12 +2505,19 @@ function addCustomTask(tab, catId){
 function restoreAllTasks(){
   // Clear deleted flag on all tasks in S
   Object.keys(S).forEach(k=>{
-    if(k.startsWith('cl_')&&S[k].deleted){delete S[k].deleted;}
+    if(k.startsWith('cl_')&&S[k]&&S[k].deleted){delete S[k].deleted;}
   });
-  saveData();
+  // Save locally
+  saveLocal(S);
+  // Force write to Firebase immediately
+  if(db){
+    try{db.ref('weddingData').set(JSON.stringify(S));}catch(e){console.warn('Firebase restore write:',e);}
+  }
+  // Re-render everything
   ['planning','attire','guests','ceremony'].forEach(renderTab);
+  if(document.getElementById('tab-dayof')?.classList.contains('active'))renderDayOfChecklist();
   renderSummary();
-  alert('All hidden tasks restored!');
+  alert('Done! All hidden tasks restored.');
 }
 
 function getAllCatIds(){
